@@ -1,0 +1,384 @@
+.preview{
+
+    width:380px;
+
+}
+
+.preview-book{
+
+    position:sticky;
+
+    top:130px;
+
+    display:flex;
+
+    justify-content:center;
+
+    perspective:1800px;
+
+}
+
+.preview-cover{
+
+    position:relative;
+
+    overflow:hidden;
+
+    width:320px;
+
+    height:470px;
+
+    border-radius:24px;
+
+    background:linear-gradient(
+        145deg,
+        #5B34F4,
+        #7C3AED,
+        #A855F7
+    );
+
+    color:white;
+
+    padding:30px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    transform:
+        rotateY(-18deg)
+        rotateX(5deg);
+
+    transition:.4s;
+
+    box-shadow:
+        0 45px 80px rgba(0,0,0,.18),
+        0 15px 35px rgba(109,76,255,.22);
+
+}
+
+.preview-cover:hover{
+
+    transform:
+        rotateY(-10deg)
+        rotateX(2deg)
+        scale(1.03);
+
+}
+
+/* ברק */
+
+.preview-cover::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:-120px;
+
+    left:-40px;
+
+    width:80px;
+
+    height:700px;
+
+    background:rgba(255,255,255,.15);
+
+    transform:rotate(25deg);
+
+}
+
+/* עובי הספר */
+
+.preview-cover::after{
+
+    content:"";
+
+    position:absolute;
+
+    right:-10px;
+
+    top:12px;
+
+    width:10px;
+
+    height:94%;
+
+    border-radius:0 12px 12px 0;
+
+    background:
+        repeating-linear-gradient(
+            white,
+            white 2px,
+            #EAEAEA 3px
+        );
+
+}
+
+.preview-logo{
+
+    font-size:34px;
+
+    font-weight:800;
+
+    color:#FFF7D6;
+
+    letter-spacing:1px;
+
+    z-index:2;
+
+}
+
+.preview-character{
+
+    width:160px;
+
+    z-index:2;
+
+    filter:
+        drop-shadow(
+            0 12px 18px rgba(0,0,0,.18)
+        );
+
+    animation:floatCharacter 4s ease-in-out infinite;
+
+}
+
+.preview-icon{
+
+    width:65px;
+
+    height:65px;
+
+    border-radius:50%;
+
+    background:rgba(255,255,255,.18);
+
+    backdrop-filter:blur(8px);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:32px;
+
+    z-index:2;
+
+}
+
+.preview-cover h2{
+
+    text-align:center;
+
+    color:#FFF4D6;
+
+    font-size:28px;
+
+    line-height:1.35;
+
+    font-weight:700;
+
+    text-shadow:
+        0 3px 12px rgba(0,0,0,.25);
+
+    z-index:2;
+
+}
+
+.preview-cover span{
+
+    color:white;
+
+    opacity:.85;
+
+    z-index:2;
+
+}
+
+/* נצנצים */
+
+.preview-cover .sparkle{
+
+    position:absolute;
+
+    color:white;
+
+    opacity:.65;
+
+    animation:floatStar 4s ease-in-out infinite;
+
+}
+
+.preview-cover .sparkle:nth-child(1){
+
+    top:70px;
+
+    right:35px;
+
+}
+
+.preview-cover .sparkle:nth-child(2){
+
+    bottom:130px;
+
+    left:40px;
+
+    animation-delay:1s;
+
+}
+
+.preview-cover .sparkle:nth-child(3){
+
+    top:180px;
+
+    left:25px;
+
+    animation-delay:2s;
+
+}
+
+/* אנימציות */
+
+@keyframes floatCharacter{
+
+    0%,100%{
+
+        transform:translateY(0);
+
+    }
+
+    50%{
+
+        transform:translateY(-12px);
+
+    }
+
+}
+
+@keyframes floatStar{
+
+    0%,100%{
+
+        transform:translateY(0);
+
+        opacity:.6;
+
+    }
+
+    50%{
+
+        transform:translateY(-8px);
+
+        opacity:1;
+
+    }
+
+}
+
+/* מובייל */
+
+@media(max-width:1100px){
+
+    .preview{
+
+        width:100%;
+
+    }
+
+    .preview-book{
+
+        margin-top:20px;
+
+        position:static;
+
+    }
+
+    .preview-cover{
+
+        width:280px;
+
+        height:420px;
+
+    }
+
+    .preview-character{
+
+        width:130px;
+
+    }
+
+}
+
+.preview-bookmark{
+
+    position:absolute;
+
+    top:0;
+
+    right:28px;
+
+    width:18px;
+
+    height:80px;
+
+    background:linear-gradient(
+        to bottom,
+        #EF4444,
+        #B91C1C
+    );
+
+}
+
+.preview-bookmark::after{
+
+    content:"";
+
+    position:absolute;
+
+    bottom:-12px;
+
+    left:0;
+
+    border-left:9px solid transparent;
+
+    border-right:9px solid transparent;
+
+    border-top:12px solid #B91C1C;
+
+}
+
+.preview-character{
+
+    width:150px;
+
+    z-index:2;
+
+    animation:floatCharacter 4s ease-in-out infinite;
+
+    filter:drop-shadow(0 15px 20px rgba(0,0,0,.2));
+
+}
+
+.preview-stars{
+
+    position:absolute;
+
+    top:75px;
+
+    right:40px;
+
+    color:white;
+
+    font-size:20px;
+
+    opacity:.8;
+
+    animation:floatStar 4s infinite;
+
+}

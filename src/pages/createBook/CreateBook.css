@@ -1,0 +1,123 @@
+.create-page {
+
+    min-height: 100vh;
+    background: #F8F8FE;
+
+    padding: 120px 25px 60px;
+
+}
+
+.create-wrapper {
+
+    max-width: 1400px;
+
+    margin: 0 auto;
+
+    display: grid;
+
+    grid-template-columns: 1fr 380px;
+
+    gap: 40px;
+
+    align-items: start;
+
+}
+
+.create-form {
+
+    background: white;
+
+    border-radius: 28px;
+
+    padding: 45px;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.08);
+
+    overflow: hidden;
+
+}
+
+.create-form h2 {
+
+    font-size: 36px;
+
+    color: #222;
+
+    margin-bottom: 10px;
+
+    line-height: 1.2;
+
+}
+
+.create-form p {
+
+    color: #777;
+
+    line-height: 1.7;
+
+    margin-bottom: 35px;
+
+    font-size: 16px;
+
+}
+
+.step-description{
+
+    margin-bottom:35px;
+
+}
+
+/* ========================= */
+/* Tablet */
+/* ========================= */
+
+@media(max-width:1200px){
+
+    .create-wrapper{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
+/* ========================= */
+/* Mobile */
+/* ========================= */
+
+@media(max-width:768px){
+
+    .create-page{
+
+        padding:90px 12px 30px;
+
+    }
+
+    .create-wrapper{
+
+        gap:25px;
+
+    }
+
+    .create-form{
+
+        padding:25px 18px;
+
+        border-radius:20px;
+
+    }
+
+    .create-form h2{
+
+        font-size:28px;
+
+    }
+
+    .create-form p{
+
+        font-size:15px;
+
+    }
+
+}

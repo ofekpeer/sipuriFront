@@ -1,0 +1,227 @@
+.our-story{
+
+    padding:140px 20px;
+
+    background:#ffffff;
+
+}
+
+.story-container{
+
+    width:90%;
+
+    max-width:1100px;
+
+    margin:auto;
+
+}
+
+.story-header{
+
+    text-align:center;
+
+    margin-bottom:0px;
+
+}
+
+.story-header span{
+
+    display:inline-block;
+
+    padding:12px 12px;
+
+    border-radius:50px;
+
+    background:#F2EDFF;
+
+    color:#6D4CFF;
+
+    font-weight:700;
+
+    margin-bottom:25px;
+
+}
+
+.story-header h2{
+
+    font-size:60px;
+
+    line-height:1.1;
+
+    color:#222;
+
+    font-weight:800;
+
+}
+
+.story-header h2 span{
+
+    background:linear-gradient(
+        135deg,
+        #6D4CFF,
+        #9B6DFF
+    );
+
+    -webkit-background-clip:text;
+
+    -webkit-text-fill-color:transparent;
+
+}
+
+.story-image{
+
+    width:100%;
+
+    border-radius:35px;
+
+    overflow:hidden;
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,.12);
+
+    margin-bottom:70px;
+
+}
+
+.story-image img{
+
+    width:100%;
+
+    display:block;
+
+    transition:.6s;
+
+}
+
+.story-image:hover img{
+
+    transform:scale(1.03);
+
+}
+
+.story-text{
+
+    max-width:760px;
+
+    margin:auto;
+
+    text-align:center;
+
+}
+
+.story-text p{
+
+    font-size:22px;
+
+    line-height:2;
+
+    color:#555;
+
+    margin-bottom:28px;
+
+}
+
+.story-text p:first-child{
+
+    font-size:32px;
+
+    font-weight:700;
+
+    color:#222;
+
+}
+
+.story-text button{
+
+    margin-top:35px;
+
+    border:none;
+
+    border-radius:60px;
+
+    padding:18px 42px;
+
+    background:linear-gradient(
+        135deg,
+        #6D4CFF,
+        #8F73FF
+    );
+
+    color:white;
+
+    font-size:17px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.35s;
+
+}
+
+.story-text button:hover{
+
+    transform:translateY(-4px);
+
+    box-shadow:
+        0 20px 45px rgba(109,76,255,.35);
+
+}
+
+@media(max-width:768px){
+
+.our-story{
+
+padding:90px 18px;
+
+}
+
+.story-header{
+
+margin-bottom:0px;
+
+}
+
+.story-header h2{
+
+font-size:36px;
+
+}
+
+.story-image{
+
+border-radius:22px;
+
+margin-bottom:40px;
+
+}
+
+.story-text{
+
+text-align:right;
+
+}
+
+.story-text p{
+
+font-size:17px;
+
+line-height:1.9;
+
+}
+
+.story-text p:first-child{
+
+font-size:24px;
+
+text-align:center;
+
+}
+
+.story-text button{
+
+width:100%;
+
+}
+
+}

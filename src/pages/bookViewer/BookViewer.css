@@ -392,3 +392,39 @@
     background:linear-gradient(90deg,#6D4CFF,#A855F7);
 
 }
+
+.cover-image{
+
+    width:320px;
+
+    max-width:100%;
+
+    border-radius:24px;
+
+    display:block;
+
+    margin:0 auto 30px;
+
+    box-shadow:0 20px 50px rgba(0,0,0,.18);
+
+}
+
+.page-image{
+
+    width:320px;
+
+    flex-shrink:0;
+
+}
+
+.page-image img{
+
+    width:100%;
+
+    display:block;
+
+    border-radius:18px;
+
+    box-shadow:0 12px 35px rgba(0,0,0,.15);
+
+}

@@ -12,13 +12,14 @@ function BookViewer() {
   useEffect(() => {
     async function loadBook() {
       try {
-        // const response = await fetch(`http://localhost:5000/api/books/${id}`);
-        const response = await fetch(`https://sipuriback.onrender.com/api/books/${id}`);
+        const response = await fetch(`http://localhost:5000/api/books/${id}`);
+        // const response = await fetch(`https://sipuriback.onrender.com/api/books/${id}`);
 
         const data = await response.json();
 
         if (data.success) {
           setBook(data.data);
+          console.log(book);
         }
       } catch (err) {
         console.error(err);
@@ -53,6 +54,14 @@ function BookViewer() {
   return (
     <div className="book-viewer">
       <div className="viewer-cover">
+        {book.cover.imageUrl && (
+          <img
+            className="cover-image"
+            src={`http://localhost:5000${book.cover.imageUrl}`}
+            alt={book.title}
+          />
+        )}
+
         <h1>{book.title}</h1>
 
         <p>{book.summary}</p>
@@ -61,8 +70,12 @@ function BookViewer() {
       <div className="viewer-pages">
         {book.pages.map((page) => (
           <div className="page-card" key={page.page}>
-            <div className="page-image">🖼️</div>
-
+            <div className="page-image">
+              <img
+                src={`http://localhost:5000${page.imageUrl}`}
+                alt={`Page ${page.page}`}
+              />
+            </div>
             <div className="page-text">
               <h3>עמוד {page.page}</h3>
 

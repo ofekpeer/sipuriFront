@@ -22,32 +22,36 @@ function StepFive() {
 
   async function createBook() {
     try {
-      const response = await fetch(
-        'https://sipuriback.onrender.com/api/books/create',
-        {
-          //const response = await fetch('http://localhost:5000/api/books/create', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData),
-        },
-      );
+      console.log(formData);
+      console.log(formData.child.image);
+      console.log(formData.child.image instanceof File);
+
+      const form = new FormData();
+
+      form.append('bookData', JSON.stringify(formData));
+
+      if (formData.child.image) {
+        form.append('image', formData.child.image);
+      }
+
+      const response = await fetch('http://localhost:5000/api/books/create', {
+        method: 'POST',
+        body: form,
+      });
 
       const data = await response.json();
 
       if (!data.success) {
         alert(data.message);
+
         return;
       }
 
-      console.log(data);
-
-      // מעבר ישירות לעמוד הספר לפי ה-ID
       navigate(`/book/${data.data._id}`);
     } catch (err) {
       console.error(err);
-      alert('אירעה שגיאה ביצירת הספר');
+
+      alert('אירעה שגיאה');
     }
   }
 

@@ -1,0 +1,362 @@
+.book-editor-page {
+  min-height: 100vh;
+  direction: rtl;
+  color: #302448;
+  background:
+    radial-gradient(circle at 10% 10%, rgba(141, 108, 255, .15), transparent 28%),
+    linear-gradient(145deg, #faf8ff, #eee9fb);
+}
+
+.book-editor-shell {
+  width: min(1180px, calc(100% - 36px));
+  margin: 0 auto;
+  padding: 126px 0 70px;
+}
+
+.book-editor-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  align-items: flex-end;
+  margin-bottom: 28px;
+}
+
+.book-editor-back {
+  display: inline-flex;
+  margin-bottom: 24px;
+  color: #6655a8;
+  font-weight: 800;
+}
+
+.book-editor-kicker,
+.book-editor-section-heading > span {
+  display: block;
+  color: #7958e8;
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: .04em;
+}
+
+.book-editor-header h1 {
+  margin: 8px 0;
+  font-size: clamp(36px, 5vw, 64px);
+  line-height: 1;
+}
+
+.book-editor-header p,
+.book-editor-section-heading p {
+  margin: 0;
+  color: #756b85;
+  font-size: 17px;
+}
+
+.book-editor-header-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.book-editor-preview,
+.book-editor-delete,
+.book-editor-save-bar button {
+  padding: 12px 18px;
+  border-radius: 13px;
+  font: inherit;
+  font-weight: 900;
+}
+
+.book-editor-preview {
+  border: 1px solid #d8cff0;
+  background: rgba(255, 255, 255, .82);
+  color: #5f46c7;
+}
+
+.book-editor-delete {
+  border: 1px solid #f0bec9;
+  background: #fff4f6;
+  color: #b52e50;
+  cursor: pointer;
+}
+
+.book-editor-lock-note,
+.book-editor-message {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+  padding: 16px 18px;
+  border-radius: 17px;
+}
+
+.book-editor-lock-note {
+  border: 1px solid #dfd4ff;
+  background: rgba(255, 255, 255, .82);
+}
+
+.book-editor-lock-note > span {
+  font-size: 28px;
+}
+
+.book-editor-lock-note p {
+  margin: 3px 0 0;
+  color: #746b82;
+}
+
+.book-editor-lock-note a {
+  margin-inline-start: auto;
+  padding: 10px 14px;
+  border-radius: 11px;
+  background: #7254df;
+  color: #fff;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.book-editor-message.is-error {
+  border: 1px solid #f2c0ca;
+  background: #fff1f4;
+  color: #ac2e4c;
+}
+
+.book-editor-message.is-success {
+  border: 1px solid #bfe7d1;
+  background: #edfff5;
+  color: #23794b;
+}
+
+.book-editor-section {
+  margin-bottom: 26px;
+  padding: 25px;
+  border: 1px solid rgba(100, 74, 176, .12);
+  border-radius: 25px;
+  background: rgba(255, 255, 255, .88);
+  box-shadow: 0 18px 45px rgba(57, 37, 100, .08);
+}
+
+.book-editor-overview {
+  display: grid;
+  grid-template-columns: minmax(240px, 340px) 1fr;
+  gap: 28px;
+}
+
+.book-editor-image-frame {
+  position: relative;
+  display: grid;
+  min-height: 260px;
+  overflow: hidden;
+  place-items: center;
+  border-radius: 18px;
+  background: #e8e1fa;
+  font-size: 52px;
+}
+
+.book-editor-image-frame.is-cover {
+  aspect-ratio: .74;
+}
+
+.book-editor-image-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.book-editor-image-action {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  left: 12px;
+  padding: 11px 14px;
+  border: 1px solid rgba(255, 255, 255, .45);
+  border-radius: 12px;
+  background: rgba(28, 20, 44, .78);
+  color: #fff;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 900;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+}
+
+.book-editor-image-action input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.book-editor-fields {
+  display: grid;
+  gap: 17px;
+  align-content: start;
+}
+
+.book-editor-fields label,
+.book-editor-page-text {
+  display: grid;
+  gap: 8px;
+  color: #46395d;
+  font-weight: 900;
+}
+
+.book-editor-fields input,
+.book-editor-fields textarea,
+.book-editor-page-text textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #ddd6ea;
+  border-radius: 14px;
+  outline: none;
+  background: #fcfbff;
+  color: #302448;
+  font: inherit;
+  line-height: 1.7;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.book-editor-fields input {
+  min-height: 50px;
+  padding: 0 15px;
+}
+
+.book-editor-fields textarea,
+.book-editor-page-text textarea {
+  padding: 13px 15px;
+  resize: vertical;
+}
+
+.book-editor-fields input:focus,
+.book-editor-fields textarea:focus,
+.book-editor-page-text textarea:focus {
+  border-color: #8769e7;
+  box-shadow: 0 0 0 4px rgba(135, 105, 231, .11);
+}
+
+.book-editor-section-heading {
+  margin-bottom: 22px;
+}
+
+.book-editor-section-heading h2 {
+  margin: 6px 0;
+  font-size: 30px;
+}
+
+.book-editor-pages {
+  display: grid;
+  gap: 18px;
+}
+
+.book-editor-page-card {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 20px;
+  padding: 16px;
+  border: 1px solid #e6e0f0;
+  border-radius: 20px;
+  background: #fbfaff;
+}
+
+.book-editor-page-card .book-editor-image-frame {
+  min-height: 310px;
+}
+
+.book-editor-page-text > span {
+  color: #7254df;
+}
+
+.book-editor-page-text textarea {
+  height: 100%;
+  min-height: 280px;
+}
+
+.book-editor-save-bar {
+  position: sticky;
+  bottom: 18px;
+  z-index: 5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  padding: 14px 16px 14px 20px;
+  border: 1px solid rgba(109, 76, 255, .2);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, .9);
+  box-shadow: 0 16px 45px rgba(45, 27, 84, .16);
+  color: #71677e;
+  backdrop-filter: blur(14px);
+}
+
+.book-editor-save-bar button {
+  border: 0;
+  background: linear-gradient(135deg, #6949eb, #8b68ef);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(105, 73, 235, .25);
+}
+
+.book-editor-save-bar button:disabled,
+.book-editor-delete:disabled {
+  opacity: .55;
+  cursor: wait;
+}
+
+.book-editor-state {
+  width: min(620px, calc(100% - 36px));
+  margin: 0 auto;
+  padding: 170px 0 60px;
+  text-align: center;
+}
+
+.book-editor-state a {
+  color: #6949d6;
+  font-weight: 900;
+}
+
+@media (max-width: 760px) {
+  .book-editor-shell {
+    width: min(100% - 24px, 1180px);
+    padding-top: 105px;
+  }
+
+  .book-editor-header,
+  .book-editor-lock-note,
+  .book-editor-save-bar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .book-editor-header-actions {
+    width: 100%;
+  }
+
+  .book-editor-header-actions > * {
+    flex: 1;
+    text-align: center;
+  }
+
+  .book-editor-lock-note a {
+    margin-inline-start: 0;
+    text-align: center;
+  }
+
+  .book-editor-overview,
+  .book-editor-page-card {
+    grid-template-columns: 1fr;
+  }
+
+  .book-editor-cover-card {
+    width: min(100%, 340px);
+    margin: 0 auto;
+  }
+
+  .book-editor-page-card .book-editor-image-frame {
+    min-height: 430px;
+  }
+
+  .book-editor-page-text textarea {
+    min-height: 220px;
+  }
+
+  .book-editor-save-bar span {
+    display: none;
+  }
+}

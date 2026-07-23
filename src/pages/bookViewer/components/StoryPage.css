@@ -1,0 +1,147 @@
+.story-page {
+  width: 100%;
+  height: 100%;
+  padding: 4px;
+  box-sizing: border-box;
+}
+
+.story-paper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.story-background {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.story-background img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: brightness(0.95) contrast(1.02);
+  transition: none !important;
+  transform: none !important;
+  pointer-events: none;
+  user-select: none;
+}
+
+.story-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #ddd;
+  font-size: 90px;
+}
+
+.story-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.05),
+    rgba(0, 0, 0, 0.4)
+  );
+}
+
+.story-content {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 18px;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.story-text {
+  color: white;
+  font-size: 15px;
+  line-height: 1.6;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  white-space: pre-wrap;
+  max-width: min(58%, 320px);
+  text-align: center;
+}
+
+.story-footer {
+  color: white;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.35);
+  font-size: 11px;
+  letter-spacing: 0.03em;
+  align-self: center;
+}
+
+.empty-paper {
+  background: #f3f3f3;
+}
+
+@media (max-width: 900px) {
+  .story-content {
+    left: 14px;
+    right: 14px;
+    bottom: 14px;
+  }
+
+  .story-text {
+    font-size: 15px;
+    padding: 12px 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .story-page {
+    padding: 5px;
+  }
+
+  .story-paper {
+    border-radius: 12px;
+  }
+
+  .story-content {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+  }
+
+  .story-text {
+    font-size: 13px;
+    line-height: 1.5;
+    padding: 10px;
+    max-width: min(72%, 260px);
+  }
+
+  .story-footer {
+    font-size: 10px;
+    padding: 5px 10px;
+  }
+}
+
+@media (max-width: 430px) {
+  .story-text {
+    font-size: 13px;
+    padding: 11px;
+  }
+}

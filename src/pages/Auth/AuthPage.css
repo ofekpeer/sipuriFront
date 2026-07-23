@@ -1,0 +1,19 @@
+.auth-page, .auth-route-loading { min-height: 100vh; display: grid; place-items: center; padding: 112px 24px 30px; background: radial-gradient(circle at top, #eee7ff, #fff 62%); }
+.auth-panel { width: min(460px, 100%); padding: 44px; border-radius: 28px; background: #fff; box-shadow: 0 25px 70px rgba(70, 48, 125, .15); text-align: right; }
+.auth-brand { display: inline-block; color: #6d4cff; font-size: 26px; font-weight: 900; }
+.auth-kicker { display: block; margin-top: 30px; color: #806ee4; font-size: 14px; font-weight: 700; }
+.auth-panel h1 { margin: 10px 0; color: #30234f; font-size: 36px; }
+.auth-panel > p { color: #746a83; line-height: 1.7; }
+.auth-panel form { display: grid; gap: 16px; margin-top: 28px; }
+.auth-panel label { display: grid; gap: 8px; color: #4c405d; font-size: 14px; font-weight: 700; }
+.auth-panel input { width: 100%; padding: 14px; border: 1px solid #ded5ee; border-radius: 12px; outline-color: #7659f2; font: inherit; }
+.auth-panel button { padding: 15px; border: 0; border-radius: 13px; color: #fff; background: linear-gradient(135deg, #6d4cff, #956fff); font: inherit; font-weight: 800; }
+.auth-panel button:disabled { opacity: .65; cursor: wait; }
+.auth-error { margin: 0; color: #c34061; font-size: 14px; }
+.auth-divider { display: flex; align-items: center; gap: 12px; margin: 22px 0; color: #93899f; font-size: 13px; }
+.auth-divider::before, .auth-divider::after { content: ''; flex: 1; height: 1px; background: #e8e1ee; }
+.google-login { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; padding: 14px; border: 1px solid #ddd6e7; border-radius: 13px; background: #fff; color: #443953; font: inherit; font-weight: 800; }
+.google-login span { display: grid; width: 23px; height: 23px; place-items: center; border-radius: 50%; color: #fff; background: conic-gradient(#4285f4 0 25%, #34a853 0 50%, #fbbc05 0 75%, #ea4335 0); font-size: 13px; }
+.auth-switch { margin: 24px 0 0; text-align: center; }
+.auth-switch a { color: #6d4cff; font-weight: 800; }
+@media (max-width: 500px) { .auth-page, .auth-route-loading { padding: 94px 16px 24px; } .auth-panel { padding: 30px 24px; } .auth-panel h1 { font-size: 30px; } }

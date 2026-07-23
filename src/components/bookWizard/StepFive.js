@@ -1,10 +1,14 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useBook } from '../../context/BookContext';
+import { createBookRequest } from '../../services/bookApi';
 
 function StepFive() {
   const { formData, prevStep } = useBook();
 
   const navigate = useNavigate();
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   const storyNames = {
     space: 'חלל',
@@ -21,37 +25,25 @@ function StepFive() {
   };
 
   async function createBook() {
+    if (submitting) return;
+
+    setSubmitting(true);
+    setSubmitError('');
+
     try {
-      console.log(formData);
-      console.log(formData.child.image);
-      console.log(formData.child.image instanceof File);
+      const response = await createBookRequest(formData, crypto.randomUUID());
 
-      const form = new FormData();
-
-      form.append('bookData', JSON.stringify(formData));
-
-      if (formData.child.image) {
-        form.append('image', formData.child.image);
-      }
-
-      const response = await fetch('http://localhost:5000/api/books/create', {
-        method: 'POST',
-        body: form,
+      navigate('/library', {
+        replace: true,
+        state: {
+          queuedBookId: response.data._id,
+          bookQueued: true,
+        },
       });
-
-      const data = await response.json();
-
-      if (!data.success) {
-        alert(data.message);
-
-        return;
-      }
-
-      navigate(`/book/${data.data._id}`);
-    } catch (err) {
-      console.error(err);
-
-      alert('אירעה שגיאה');
+    } catch (error) {
+      console.error(error);
+      setSubmitError(error.message || 'לא הצלחנו להתחיל את יצירת הספר');
+      setSubmitting(false);
     }
   }
 
@@ -79,13 +71,15 @@ function StepFive() {
         <h3>תמונה: {formData.child.image ? '✅ הועלתה' : '❌ לא הועלתה'}</h3>
       </div>
 
+      {submitError && <p className="book-submit-error" role="alert">{submitError}</p>}
+
       <div className="wizard-buttons">
         <button className="back-btn" onClick={prevStep}>
           ← הקודם
         </button>
 
-        <button className="next-btn" onClick={createBook}>
-          ✨ צור את הספר
+        <button className="next-btn" onClick={createBook} disabled={submitting}>
+          {submitting ? 'שומר ומתחיל ליצור...' : '✨ צור את הספר'}
         </button>
       </div>
     </>

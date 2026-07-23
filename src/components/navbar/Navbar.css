@@ -181,6 +181,42 @@
   gap: 18px;
 }
 
+.library-nav-link {
+  padding: 11px 17px;
+  border: 1px solid rgba(109, 76, 255, 0.18);
+  border-radius: 999px;
+  color: #6248d4;
+  background: rgba(255, 255, 255, 0.72);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.account-btn {
+  padding: 10px 14px;
+  border: 1px solid rgba(109, 76, 255, 0.18);
+  border-radius: 999px;
+  color: #6248d4;
+  background: rgba(255, 255, 255, 0.72);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.mobile-account-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 28px;
+  padding: 14px;
+  border: 1px solid rgba(109, 76, 255, 0.2);
+  border-radius: 14px;
+  color: #6248d4;
+  background: #f5f1ff;
+  font: inherit;
+  font-weight: 800;
+}
+
 /* ========================= */
 /* CTA BUTTON */
 /* ========================= */
@@ -665,6 +701,21 @@
 
 @media (max-width:950px){
 
+    .navbar--home .account-btn,
+    .navbar--app .library-nav-link,
+    .navbar--app .account-btn,
+    .navbar--auth .account-btn{
+
+        display:none;
+
+    }
+
+    .navbar--progress .navbar-container{
+
+        height:112px;
+
+    }
+
     .desktop-nav{
 
         display:none;
@@ -707,7 +758,7 @@
 
         align-items:flex-end;
 
-        gap:8px;
+        gap:6px;
 
     }
 
@@ -742,6 +793,10 @@
 }
 
 @media (max-width: 768px) {
+  .navbar--progress .navbar-container {
+    height: 104px;
+  }
+
   .navbar-container {
     width: 92%;
 

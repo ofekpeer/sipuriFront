@@ -1,0 +1,165 @@
+.book-view {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.book-stage {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  padding: 0;
+  position: relative;
+}
+
+/* Do not style all descendants here: react-pageflip applies transforms to its
+   internal elements while it renders and turns pages. */
+.cover-book-image,
+.story-background img {
+  display: block;
+  object-position: center center;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Keep the illustration fixed. Page transforms belong to react-pageflip's
+   wrapper elements, never to the image itself. */
+.cover-page:hover .cover-book-image,
+.story-page:hover .story-background img {
+  top: 0;
+  left: 0;
+  transform: none !important;
+}
+
+.book-view > .nav-button:first-child,
+.book-view > .nav-button:last-child {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%) scale(var(--nav-button-scale, 1));
+  z-index: 10;
+  pointer-events: auto;
+}
+
+.book-view > .nav-button:first-child {
+  left: 16px;
+}
+
+.book-view > .nav-button:last-child {
+  right: 16px;
+}
+
+.spread {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  overflow: hidden;
+}
+
+.spread > * {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+
+.nav-button {
+  width: 48px;
+  height: 48px;
+  border: none;
+  outline: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  font-size: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.12s ease;
+}
+
+.nav-button:hover:not(:disabled) {
+  background: white;
+}
+
+.nav-button:active:not(:disabled) {
+  --nav-button-scale: 0.97;
+}
+
+.nav-button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.story-page.empty-page {
+  visibility: hidden;
+}
+
+@media (max-width: 900px) {
+  .book-view {
+    padding: 0 8px;
+  }
+
+  .nav-button {
+    width: 46px;
+    height: 46px;
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .book-view {
+    display: block;
+    padding: 0;
+  }
+
+  .book-view > .nav-button:first-child {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    transform: translateY(-50%) scale(var(--nav-button-scale, 1));
+  }
+
+  .book-view > .nav-button:last-child {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%) scale(var(--nav-button-scale, 1));
+  }
+
+  .book-stage {
+    min-width: 0;
+    width: 100%;
+    height: 100vh;
+  }
+
+  .nav-button {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    color: #fff;
+    background: rgba(21, 28, 52, 0.42);
+    border: 1px solid rgba(255, 255, 255, 0.36);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+    backdrop-filter: blur(6px);
+  }
+
+  .nav-button:hover:not(:disabled) {
+    background: rgba(21, 28, 52, 0.56);
+  }
+
+  .story-page.empty-page {
+    display: none;
+  }
+}

@@ -1,6 +1,7 @@
 import "./Navbar.css";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import {
   FaBars,
   FaTimes,
@@ -13,10 +14,14 @@ function Navbar({
   showProgress = false,
   step = 1,
   totalSteps = 5,
+  variant = "home",
 }) {
 
-  const isHome = !showProgress;
+  const isHome = variant === "home" && !showProgress;
+  const isApp = variant === "app" && !showProgress;
+  const isAuth = variant === "auth" && !showProgress;
   const progress = (step / totalSteps) * 100;
+  const { user, logout } = useAuth();
 
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -58,7 +63,7 @@ function Navbar({
   return (
 
     <header
-      className={`navbar ${scrolled ? "navbar-scrolled" : ""}`}
+      className={`navbar navbar--${variant} ${showProgress ? "navbar--progress" : ""} ${scrolled ? "navbar-scrolled" : ""}`}
     >
 
       <div className="navbar-container">
@@ -111,9 +116,21 @@ function Navbar({
                 ביקורות
               </a>
 
+              <Link to="/library">
+                הספרייה שלי
+              </Link>
+
             </nav>
 
             <div className="navbar-actions">
+
+              {user ? (
+                <button className="account-btn" onClick={logout}>
+                  התנתקות {user.name ? `· ${user.name}` : ''}
+                </button>
+              ) : (
+                <Link className="account-btn" to="/login">התחברות</Link>
+              )}
 
               <Link to="/create-book">
 
@@ -138,6 +155,36 @@ function Navbar({
 
           </>
 
+        )}
+
+        {isApp && (
+          <>
+            <nav className="desktop-nav">
+              <Link to="/">דף הבית</Link>
+              <Link to="/library">הספרייה שלי</Link>
+            </nav>
+
+            <div className="navbar-actions">
+              <Link className="library-nav-link" to="/library">📚 הספרים שלי</Link>
+              {user ? (
+                <button className="account-btn" onClick={logout}>התנתקות</button>
+              ) : (
+                <Link className="account-btn" to="/login">התחברות</Link>
+              )}
+              <button className="menu-btn" onClick={() => setMobileOpen(true)}>
+                <FaBars />
+              </button>
+            </div>
+          </>
+        )}
+
+        {isAuth && (
+          <div className="navbar-actions">
+            <button className="menu-btn" onClick={() => setMobileOpen(true)}>
+              <FaBars />
+            </button>
+            <Link className="account-btn" to="/">← חזרה לדף הבית</Link>
+          </div>
         )}
 
         {showProgress && (
@@ -222,6 +269,10 @@ function Navbar({
 
         <nav>
 
+          <Link to="/" onClick={() => setMobileOpen(false)}>
+            דף הבית
+          </Link>
+
           <a
 
             href="#how"
@@ -270,7 +321,24 @@ function Navbar({
 
           </a>
 
+          <Link
+            to="/library"
+            onClick={() => setMobileOpen(false)}
+          >
+            הספרייה שלי
+          </Link>
+
         </nav>
+
+        {user ? (
+          <button className="mobile-account-btn" onClick={() => { logout(); setMobileOpen(false); }}>
+            התנתקות {user.name ? `· ${user.name}` : ''}
+          </button>
+        ) : (
+          <Link className="mobile-account-btn" to="/login" onClick={() => setMobileOpen(false)}>
+            התחברות לחשבון
+          </Link>
+        )}
 
         <Link
 

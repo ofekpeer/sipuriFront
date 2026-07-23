@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useReducer } from 'react';
 
 const BookContext = createContext();
 
@@ -17,64 +17,84 @@ const initialFormData = {
   },
 
   design: {
-    illustrationStyle: '',
+    illustrationStyle: 'pixar',
   },
 };
 
-export function BookProvider({ children }) {
-  const [step, setStep] = useState(1);
+const initialState = {
+  step: 1,
+  formData: initialFormData,
+};
 
-  const [formData, setFormData] = useState(initialFormData);
+export function bookWizardReducer(state, action) {
+  switch (action.type) {
+    case 'UPDATE_FIELD':
+      return {
+        ...state,
+        formData: {
+          ...state.formData,
+          [action.section]: {
+            ...state.formData[action.section],
+            [action.field]: action.value,
+          },
+        },
+      };
+
+    case 'NEXT_STEP':
+      return {
+        ...state,
+        step: Math.min(state.step + 1, 5),
+      };
+
+    case 'PREV_STEP':
+      return {
+        ...state,
+        step: Math.max(state.step - 1, 1),
+      };
+
+    case 'RESET':
+      return initialState;
+
+    default:
+      return state;
+  }
+}
+
+export function BookProvider({ children }) {
+  const [state, dispatch] = useReducer(bookWizardReducer, initialState);
 
   function updateField(section, field, value) {
-    setFormData((prev) => ({
-      ...prev,
-
-      [section]: {
-        ...prev[section],
-
-        [field]: value,
-      },
-    }));
+    dispatch({ type: 'UPDATE_FIELD', section, field, value });
   }
 
   function handleInputChange(e) {
     const { name, value } = e.target;
-
     const [section, field] = name.split('.');
 
     updateField(section, field, value);
   }
 
   function resetBook() {
-    setFormData(initialFormData);
-
-    setStep(1);
+    dispatch({ type: 'RESET' });
   }
 
   function nextStep() {
-    setStep((prev) => Math.min(prev + 1, 5));
+    dispatch({ type: 'NEXT_STEP' });
   }
 
   function prevStep() {
-    setStep((prev) => Math.max(prev - 1, 1));
+    dispatch({ type: 'PREV_STEP' });
   }
 
   return (
     <BookContext.Provider
       value={{
-        step,
-        setStep,
-
-        formData,
-        setFormData,
-
+        step: state.step,
+        formData: state.formData,
         updateField,
         handleInputChange,
-
         nextStep,
         prevStep,
-
         resetBook,
       }}
     >

@@ -1,121 +1,60 @@
-import { useBook } from "../../context/BookContext";
+import { useBook } from '../../context/BookContext';
 
 function StepFour() {
+  const {
+    formData,
 
-    const {
+    updateField,
 
-        formData,
+    nextStep,
 
-        updateField,
+    prevStep,
+  } = useBook();
 
-        nextStep,
+  function handleImage(e) {
+    const file = e.target.files[0];
 
-        prevStep,
+    if (!file) return;
 
-    } = useBook();
+    updateField(
+      'child',
 
-    function handleImage(e) {
+      'image',
 
-        const file = e.target.files[0];
-
-        if (!file) return;
-
-        updateField(
-
-            "child",
-
-            "image",
-
-            file
-
-        );
-
-    }
-
-    return (
-
-        <>
-
-            <h2>
-
-                העלה תמונה של הילד 📸
-
-            </h2>
-
-            <p className="step-description">
-
-                תמונה ברורה תעזור ל-AI ליצור איורים מדויקים יותר.
-
-            </p>
-
-            <div className="upload-box">
-
-                <input
-
-                    type="file"
-
-                    accept="image/*"
-
-                    onChange={handleImage}
-
-                />
-
-                {
-
-                    formData.child.image ? (
-
-                        <p>
-
-                            ✅ {formData.child.image.name}
-
-                        </p>
-
-                    ) : (
-
-                        <p>
-
-                            בחר תמונה מהמחשב
-
-                        </p>
-
-                    )
-
-                }
-
-            </div>
-
-            <div className="wizard-buttons">
-
-                <button
-
-                    className="back-btn"
-
-                    onClick={prevStep}
-
-                >
-
-                    ← הקודם
-
-                </button>
-
-                <button
-
-                    className="next-btn"
-
-                    onClick={nextStep}
-
-                >
-
-                    הבא →
-
-                </button>
-
-            </div>
-
-        </>
-
+      file,
     );
+  }
 
+  return (
+    <>
+      <h2>העלה תמונה של הילד 📸</h2>
+
+      <p className="step-description">
+        תמונה ברורה תעזור ל-AI ליצור איורים מדויקים יותר — אבל גם אפשר להמשיך
+        בלי תמונה.
+      </p>
+
+      <div className="upload-box">
+        <input type="file" accept="image/*" onChange={handleImage} />
+
+        {formData.child.image ? (
+          <p>✅ {formData.child.image.name}</p>
+        ) : (
+          <p>בחר תמונה מהמחשב</p>
+        )}
+      </div>
+
+      <div className="wizard-buttons">
+        <button className="back-btn" onClick={prevStep}>
+          ← הקודם
+        </button>
+
+        <button className="next-btn" onClick={nextStep}>
+          הבא →
+        </button>
+      </div>
+    </>
+  );
 }
 
 export default StepFour;

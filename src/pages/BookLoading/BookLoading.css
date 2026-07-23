@@ -1,0 +1,70 @@
+.book-loading {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #fff8ef 0%, #fdf3ff 100%);
+  padding: 24px;
+}
+
+.loading-card {
+  width: 560px;
+  max-width: 100%;
+  background: white;
+  border-radius: 28px;
+  padding: 42px 36px;
+  text-align: center;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(109, 76, 255, 0.08);
+}
+
+.loading-card h1 {
+  margin: 24px 0 10px;
+  color: #222;
+  font-size: 28px;
+}
+
+.loading-card p {
+  color: #666;
+  font-size: 18px;
+  margin-bottom: 18px;
+}
+
+.loading-spinner {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  border: 7px solid #ececec;
+  border-top: 7px solid #7b61ff;
+  margin: auto;
+  animation: spin 1s linear infinite;
+}
+
+.progress-bar {
+  height: 12px;
+  width: 100%;
+  background: #f3efff;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 18px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #7b61ff 0%, #a18bff 100%);
+  border-radius: inherit;
+  transition: width 0.35s ease;
+}
+
+.progress-text {
+  display: block;
+  margin-top: 10px;
+  font-weight: 700;
+  color: #6d4cff;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

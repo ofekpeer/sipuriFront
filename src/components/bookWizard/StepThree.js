@@ -1,141 +1,87 @@
-import { useBook } from "../../context/BookContext";
+import { useBook } from '../../context/BookContext';
 
 function StepThree() {
+  const {
+    formData,
 
-    const {
+    handleInputChange,
 
-        formData,
+    nextStep,
 
-        handleInputChange,
+    prevStep,
+  } = useBook();
 
-        nextStep,
+  const styles = [
+    {
+      title: 'דיסני',
+      value: 'disney',
+      icon: '🏰',
+    },
 
-        prevStep,
+    {
+      title: 'פיקסאר',
+      value: 'pixar',
+      icon: '🎬',
+    },
 
-    } = useBook();
+    {
+      title: 'צבעי מים',
+      value: 'watercolor',
+      icon: '🎨',
+    },
 
-    const styles = [
+    {
+      title: 'קומיקס',
+      value: 'comic',
+      icon: '📚',
+    },
+  ];
 
-        {
-            title: "דיסני",
-            value: "disney",
-            icon: "🏰",
-        },
+  return (
+    <>
+      <h2>בחר את סגנון האיור 🎨</h2>
 
-        {
-            title: "פיקסאר",
-            value: "pixar",
-            icon: "🎬",
-        },
+      <p className="step-description">
+        זה ישפיע על המראה של כל הדמויות והדפים בספר.
+      </p>
 
-        {
-            title: "צבעי מים",
-            value: "watercolor",
-            icon: "🎨",
-        },
+      <div className="cards-grid">
+        {styles.map((style) => (
+          <div
+            key={style.value}
+            className={`story-card ${
+              formData.design.illustrationStyle === style.value
+                ? 'selected'
+                : ''
+            }`}
+            onClick={() =>
+              handleInputChange({
+                target: {
+                  name: 'design.illustrationStyle',
 
-        {
-            title: "קומיקס",
-            value: "comic",
-            icon: "📚",
-        },
+                  value: style.value,
+                },
+              })
+            }
+          >
+            <span>{style.icon}</span>
 
-    ];
+            <h3>{style.title}</h3>
+          </div>
+        ))}
+      </div>
 
-    return (
+      <div className="wizard-buttons">
+        <button className="back-btn" onClick={prevStep}>
+          ← הקודם
+        </button>
 
-        <>
-
-            <h2>
-
-                בחר את סגנון האיור 🎨
-
-            </h2>
-
-            <div className="cards-grid">
-
-                {
-
-                    styles.map((style) => (
-
-                        <div
-
-                            key={style.value}
-
-                            className={`story-card ${
-                                formData.design.illustrationStyle === style.value
-                                    ? "selected"
-                                    : ""
-                            }`}
-
-                            onClick={() =>
-                                handleInputChange({
-
-                                    target: {
-
-                                        name: "design.illustrationStyle",
-
-                                        value: style.value,
-
-                                    },
-
-                                })
-                            }
-
-                        >
-
-                            <span>
-
-                                {style.icon}
-
-                            </span>
-
-                            <h3>
-
-                                {style.title}
-
-                            </h3>
-
-                        </div>
-
-                    ))
-
-                }
-
-            </div>
-
-            <div className="wizard-buttons">
-
-                <button
-
-                    className="back-btn"
-
-                    onClick={prevStep}
-
-                >
-
-                    ← הקודם
-
-                </button>
-
-                <button
-
-                    className="next-btn"
-
-                    onClick={nextStep}
-
-                >
-
-                    הבא →
-
-                </button>
-
-            </div>
-
-        </>
-
-    );
-
+        <button className="next-btn" onClick={nextStep} disabled={!formData.design.illustrationStyle}>
+          הבא →
+        </button>
+      </div>
+    </>
+  );
 }
 
 export default StepThree;

@@ -1,28 +1,26 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+
+import Book from './components/Book/Book';
+import { getBookRequest } from '../../services/bookApi';
+import Navbar from '../../components/navbar/Navbar';
 import './BookViewer.css';
 
 function BookViewer() {
   const { id } = useParams();
 
   const [book, setBook] = useState(null);
-
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     async function loadBook() {
       try {
-        const response = await fetch(`http://localhost:5000/api/books/${id}`);
-        // const response = await fetch(`https://sipuriback.onrender.com/api/books/${id}`);
-
-        const data = await response.json();
-
-        if (data.success) {
-          setBook(data.data);
-          console.log(book);
-        }
+        const data = await getBookRequest(id);
+        setBook(data.data);
       } catch (err) {
         console.error(err);
+        setError(err.message);
       } finally {
         setLoading(false);
       }
@@ -33,63 +31,26 @@ function BookViewer() {
 
   if (loading) {
     return (
-      <div className="book-viewer-empty">
-        <h2>טוען ספר...</h2>
-      </div>
+      <><Navbar variant="app" /><div className="viewer-loading">
+        <h2>טוען את הספר...</h2>
+      </div></>
     );
   }
 
   if (!book) {
     return (
-      <div className="book-viewer-empty">
-        <h2>לא נמצא ספר</h2>
+      <><Navbar variant="app" /><div className="viewer-loading">
+        <h2>{error || 'הספר לא נמצא'}</h2>
 
-        <Link to="/create-book">
-          <button>צור ספר חדש</button>
-        </Link>
-      </div>
+        <Link to="/create-book">צור ספר חדש</Link>
+      </div></>
     );
   }
 
   return (
     <div className="book-viewer">
-      <div className="viewer-cover">
-        {book.cover.imageUrl && (
-          <img
-            className="cover-image"
-            src={`http://localhost:5000${book.cover.imageUrl}`}
-            alt={book.title}
-          />
-        )}
-
-        <h1>{book.title}</h1>
-
-        <p>{book.summary}</p>
-      </div>
-
-      <div className="viewer-pages">
-        {book.pages.map((page) => (
-          <div className="page-card" key={page.page}>
-            <div className="page-image">
-              <img
-                src={`http://localhost:5000${page.imageUrl}`}
-                alt={`Page ${page.page}`}
-              />
-            </div>
-            <div className="page-text">
-              <h3>עמוד {page.page}</h3>
-
-              <p>{page.text}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div className="viewer-ending">
-        <h2>מוסר השכל</h2>
-
-        <p>{book.moral}</p>
-      </div>
+      <Navbar variant="app" />
+      <Book book={book} />
     </div>
   );
 }

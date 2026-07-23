@@ -83,7 +83,7 @@ function AuthPage({ mode }) {
         </form>
 
         <div className="auth-divider"><span>או</span></div>
-        <button type="button" className="google-login" onClick={() => window.location.assign(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/auth/google`)}>
+        <button type="button" className="google-login" onClick={() => window.location.assign(`${process.env.REACT_APP_API_URL || 'https://sipuriback.onrender.com'}/api/auth/google`)}>
           <span>G</span> המשך עם Google
         </button>
 

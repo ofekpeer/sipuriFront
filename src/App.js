@@ -13,6 +13,7 @@ import ProtectedRoute from './components/auth/ProtectedRoute';
 import AuthPage from './pages/Auth/AuthPage';
 import Library from './pages/Library/Library';
 import BookEditor from './pages/BookEditor/BookEditor';
+import PaymentResult from './pages/PaymentResult/PaymentResult';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
         <Route path="/book-loading" element={<BookLoading />} />
 
         <Route path="/book/:id/checkout" element={<ProtectedRoute><BookCheckout /></ProtectedRoute>} />
+        <Route path="/payment/result" element={<ProtectedRoute><PaymentResult /></ProtectedRoute>} />
         <Route path="/book/:id" element={<BookViewer />} />
         <Route path="/login" element={<AuthPage mode="login" />} />
         <Route path="/register" element={<AuthPage mode="register" />} />

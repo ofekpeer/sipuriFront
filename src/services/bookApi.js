@@ -168,3 +168,51 @@ export async function deleteBookRequest(id) {
 
   return data;
 }
+
+export async function createBookCheckoutRequest(bookId) {
+  const response = await fetchWithTimeout(
+    `${API_URL}/api/payments/books/${bookId}/checkout`,
+    {
+      method: 'POST',
+      headers: getAuthHeaders(),
+    },
+    30_000,
+  );
+  const data = await readJsonResponse(response);
+
+  if (!response.ok || !data.success) {
+    throw new Error(data.message || 'לא הצלחנו לפתוח את התשלום');
+  }
+
+  return data;
+}
+
+export async function getPaymentRequest(paymentId) {
+  const response = await fetchWithTimeout(
+    `${API_URL}/api/payments/${paymentId}`,
+    { headers: getAuthHeaders() },
+    15_000,
+  );
+  const data = await readJsonResponse(response);
+
+  if (!response.ok || !data.success) {
+    throw new Error(data.message || 'לא הצלחנו לטעון את סטטוס התשלום');
+  }
+
+  return data;
+}
+
+export async function getPaymentConfigurationRequest() {
+  const response = await fetchWithTimeout(
+    `${API_URL}/api/payments/config`,
+    {},
+    15_000,
+  );
+  const data = await readJsonResponse(response);
+
+  if (!response.ok || !data.success) {
+    throw new Error(data.message || 'לא הצלחנו לטעון את פרטי התשלום');
+  }
+
+  return data;
+}

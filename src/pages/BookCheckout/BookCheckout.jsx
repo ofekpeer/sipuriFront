@@ -1,19 +1,31 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
-import { getBookAssetUrl, getBookRequest } from '../../services/bookApi';
+import {
+  createBookCheckoutRequest,
+  getBookAssetUrl,
+  getBookRequest,
+  getPaymentConfigurationRequest,
+} from '../../services/bookApi';
 import './BookCheckout.css';
 
 function BookCheckout() {
   const { id } = useParams();
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [startingPayment, setStartingPayment] = useState(false);
+  const [paymentError, setPaymentError] = useState('');
+  const [paymentConfig, setPaymentConfig] = useState(null);
 
   useEffect(() => {
     async function loadBook() {
       try {
-        const response = await getBookRequest(id);
-        setBook(response.data);
+        const [bookResponse, configResponse] = await Promise.all([
+          getBookRequest(id),
+          getPaymentConfigurationRequest(),
+        ]);
+        setBook(bookResponse.data);
+        setPaymentConfig(configResponse.data);
       } catch (error) {
         console.error(error);
       } finally {
@@ -24,15 +36,22 @@ function BookCheckout() {
     loadBook();
   }, [id]);
 
-  function continueToPayment() {
-    const checkoutUrl =
-      book?.checkoutUrl ||
-      (process.env.REACT_APP_CHECKOUT_URL
-        ? `${process.env.REACT_APP_CHECKOUT_URL}?bookId=${encodeURIComponent(id)}`
-        : null);
+  async function continueToPayment() {
+    setStartingPayment(true);
+    setPaymentError('');
 
-    if (checkoutUrl) {
-      window.location.assign(checkoutUrl);
+    try {
+      const response = await createBookCheckoutRequest(id);
+
+      if (response.data.alreadyPurchased) {
+        window.location.assign(`/book/${id}`);
+        return;
+      }
+
+      window.location.assign(response.data.checkoutUrl);
+    } catch (error) {
+      setPaymentError(error.message || 'לא הצלחנו לפתוח את דף התשלום.');
+      setStartingPayment(false);
     }
   }
 
@@ -95,12 +114,17 @@ function BookCheckout() {
             <div className="checkout-order">
               <span>הספר שנבחר</span>
               <strong>ספר דיגיטלי אישי</strong>
+              {paymentConfig?.configured ? (
+                <b>{new Intl.NumberFormat('he-IL', { style: 'currency', currency: 'ILS' }).format(paymentConfig.amountAgorot / 100)}</b>
+              ) : null}
             </div>
 
-            <button type="button" className="checkout-button" onClick={continueToPayment}>
-              <span>המשך לתשלום מאובטח</span>
+            <button type="button" className="checkout-button" onClick={continueToPayment} disabled={startingPayment || !paymentConfig?.configured}>
+              <span>{startingPayment ? 'מעבירים לתשלום מאובטח...' : 'המשך לתשלום מאובטח'}</span>
               <span aria-hidden="true">←</span>
             </button>
+
+            {paymentError ? <p className="checkout-error" role="alert">{paymentError}</p> : null}
 
             <p className="checkout-note">🔒 פרטי התשלום מוגנים ומעובדים דרך ספק סליקה מאובטח.</p>
             <Link className="checkout-back" to={`/book/${id}`}>

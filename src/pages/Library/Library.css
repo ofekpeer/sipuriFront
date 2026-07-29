@@ -37,6 +37,9 @@
 .library-book-actions > *,
 .library-remove-action.is-full { min-height: 38px; padding: 9px 11px; border-radius: 10px; text-align: center; font: inherit; font-size: 13px; font-weight: 900; cursor: pointer; }
 .library-read-action { border: 0; background: #6d4cff; color: #fff !important; }
+.library-cart-action { grid-column: 1 / -1; min-height: 40px; border: 1px solid #cfc2f3; border-radius: 10px; background: #eee8ff; color: #5f43c8; font: inherit; font-size: 13px; font-weight: 900; cursor: pointer; }
+.library-cart-action.is-added { display: grid; place-items: center; background: #e8f8f1; border-color: #bce6d2; color: #277255 !important; }
+.library-cart-action:disabled { cursor: wait; opacity: .6; }
 .library-edit-action { border: 1px solid #d9d0f1; background: #f6f3ff; color: #5f46c7 !important; }
 .library-remove-action { border: 1px solid #f0cbd3; background: #fff4f6; color: #b43452; }
 .library-remove-action:disabled { opacity: .55; cursor: wait; }

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 import { useAuth } from '../../context/AuthContext';
+import { useCart } from '../../context/CartContext';
 import { getLibraryRequest } from '../../services/authApi';
 import { deleteBookRequest, getBookAssetUrl } from '../../services/bookApi';
 import './Library.css';
@@ -9,6 +10,12 @@ import './Library.css';
 function Library() {
   const location = useLocation();
   const { user, token, logout } = useAuth();
+  const {
+    addBook,
+    containsBook,
+    summary: cartSummary,
+    updatingBookId,
+  } = useCart();
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -82,12 +89,24 @@ function Library() {
     }
   }
 
+  async function addLibraryBookToCart(book) {
+    setError('');
+    try {
+      await addBook(book._id);
+    } catch (requestError) {
+      setError(requestError.message || 'לא הצלחנו להוסיף את הספר לעגלה');
+    }
+  }
+
   return (
     <main className="library-page">
       <header className="library-header">
         <Link to="/" className="library-brand">סיפורי</Link>
         <div className="library-account">
           <Link to="/" className="library-home-link">חזרה לדף הבית</Link>
+          <Link to="/cart" className="library-home-link">
+            עגלה ({cartSummary.itemCount})
+          </Link>
           <span>שלום, {user?.name || 'קורא/ת'}</span>
           <button type="button" onClick={logout}>התנתקות</button>
         </div>
@@ -167,6 +186,24 @@ function Library() {
                   <Link className="library-read-action" to={`/book/${book._id}`}>
                     להמשך קריאה
                   </Link>
+                  {book.isOwner && !book.isPurchased && (
+                    containsBook(book._id) ? (
+                      <Link className="library-cart-action is-added" to="/cart">
+                        נוסף לעגלה
+                      </Link>
+                    ) : (
+                      <button
+                        type="button"
+                        className="library-cart-action"
+                        disabled={updatingBookId === String(book._id)}
+                        onClick={() => addLibraryBookToCart(book)}
+                      >
+                        {updatingBookId === String(book._id)
+                          ? 'מוסיף...'
+                          : 'הוספה לעגלה'}
+                      </button>
+                    )
+                  )}
                   {book.canEdit && (
                     <Link
                       className="library-edit-action"

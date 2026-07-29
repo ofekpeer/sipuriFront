@@ -20,36 +20,41 @@ import PrivacyPolicy from './pages/PrivacyPolicy/PrivacyPolicy';
 import FAQ from './pages/FAQ/FAQ';
 import HowItWorks from './pages/HowItWorks/HowItWorks';
 import GoogleOAuthRedirect from './components/auth/GoogleOAuthRedirect';
+import { CartProvider } from './context/CartContext';
+import Cart from './pages/Cart/Cart';
 
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-      <ScrollToTop />
-      <GoogleOAuthRedirect />
-      <Routes>
-        <Route element={<HomeLayout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/terms" element={<TermsOfUse />} />
-          <Route path="/privacy" element={<PrivacyPolicy />} />
-          <Route path="/faq" element={<FAQ />} />
-          <Route path="/how-it-works" element={<HowItWorks />} />
-        </Route>
+        <CartProvider>
+          <ScrollToTop />
+          <GoogleOAuthRedirect />
+          <Routes>
+            <Route element={<HomeLayout />}>
+              <Route path="/" element={<Home />} />
+              <Route path="/terms" element={<TermsOfUse />} />
+              <Route path="/privacy" element={<PrivacyPolicy />} />
+              <Route path="/faq" element={<FAQ />} />
+              <Route path="/how-it-works" element={<HowItWorks />} />
+              <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
+            </Route>
 
-        <Route element={<CreateBookLayout />}>
-          <Route path="/create-book" element={<ProtectedRoute><CreateBook /></ProtectedRoute>} />
-        </Route>
+            <Route element={<CreateBookLayout />}>
+              <Route path="/create-book" element={<ProtectedRoute><CreateBook /></ProtectedRoute>} />
+            </Route>
 
-        <Route path="/book-loading" element={<BookLoading />} />
+            <Route path="/book-loading" element={<BookLoading />} />
 
-        <Route path="/book/:id/checkout" element={<ProtectedRoute><BookCheckout /></ProtectedRoute>} />
-        <Route path="/payment/result" element={<ProtectedRoute><PaymentResult /></ProtectedRoute>} />
-        <Route path="/book/:id" element={<BookViewer />} />
-        <Route path="/login" element={<AuthPage mode="login" />} />
-        <Route path="/register" element={<AuthPage mode="register" />} />
-        <Route path="/library" element={<ProtectedRoute><Library /></ProtectedRoute>} />
-        <Route path="/library/book/:id/edit" element={<ProtectedRoute><BookEditor /></ProtectedRoute>} />
-      </Routes>
+            <Route path="/book/:id/checkout" element={<ProtectedRoute><BookCheckout /></ProtectedRoute>} />
+            <Route path="/payment/result" element={<ProtectedRoute><PaymentResult /></ProtectedRoute>} />
+            <Route path="/book/:id" element={<BookViewer />} />
+            <Route path="/login" element={<AuthPage mode="login" />} />
+            <Route path="/register" element={<AuthPage mode="register" />} />
+            <Route path="/library" element={<ProtectedRoute><Library /></ProtectedRoute>} />
+            <Route path="/library/book/:id/edit" element={<ProtectedRoute><BookEditor /></ProtectedRoute>} />
+          </Routes>
+        </CartProvider>
       </AuthProvider>
     </BrowserRouter>
   );

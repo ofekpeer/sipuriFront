@@ -122,7 +122,17 @@
 
 .cover::before { position: absolute; inset: 0; background: radial-gradient(circle at 50% 32%, rgba(255,255,255,.22), transparent 32%), linear-gradient(180deg, transparent 58%, rgba(21, 10, 72, .25)); content: ""; }
 .bookmark { position: absolute; top: 0; right: 30px; width: 18px; height: 78px; background: linear-gradient(#ff738d, #e4375c); }
-.bookmark::after { position: absolute; bottom: -11px; border-right: 9px solid transparent; border-left: 9px solid transparent; border-top: 11px solid #e4375c; content: ""; }
+.bookmark::after {
+  position: absolute;
+  bottom: -11px;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-right: 9px solid transparent;
+  border-left: 9px solid transparent;
+  border-top: 11px solid #e4375c;
+  content: "";
+}
 .cover-kicker { position: relative; color: #fff5ca; font-size: 1.22rem; font-weight: 900; letter-spacing: 0.13em; }
 .monster { position: relative; display: grid; width: 224px; height: 224px; place-items: center; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,.23), transparent 67%); }
 .monster img { width: 205px; filter: drop-shadow(0 13px 16px rgba(0,0,0,.19)); }

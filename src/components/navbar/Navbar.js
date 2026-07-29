@@ -2,10 +2,12 @@ import "./Navbar.css";
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { useCart } from "../../context/CartContext";
 import {
   FaBars,
   FaTimes,
   FaArrowLeft,
+  FaShoppingCart,
 } from "react-icons/fa";
 
 import Fox from "../../assets/sipuri-fox-logo.png";
@@ -22,6 +24,8 @@ function Navbar({
   const isAuth = variant === "auth" && !showProgress;
   const progress = (step / totalSteps) * 100;
   const { user, logout } = useAuth();
+  const { summary: cartSummary } = useCart();
+  const cartCount = cartSummary?.itemCount || 0;
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -150,6 +154,14 @@ function Navbar({
 
             <div className="navbar-actions">
 
+              {user && (
+                <Link className="cart-nav-link" to="/cart" aria-label={`עגלה, ${cartCount} פריטים`}>
+                  <FaShoppingCart aria-hidden="true" />
+                  <span className="cart-nav-link__label">עגלה</span>
+                  {cartCount > 0 && <span className="cart-nav-badge">{cartCount}</span>}
+                </Link>
+              )}
+
               {user ? (
                 <button className="account-btn" onClick={logout}>
                   התנתקות {user.name ? `· ${user.name}` : ''}
@@ -191,6 +203,13 @@ function Navbar({
             </nav>
 
             <div className="navbar-actions">
+              {user && (
+                <Link className="cart-nav-link" to="/cart" aria-label={`עגלה, ${cartCount} פריטים`}>
+                  <FaShoppingCart aria-hidden="true" />
+                  <span className="cart-nav-link__label">עגלה</span>
+                  {cartCount > 0 && <span className="cart-nav-badge">{cartCount}</span>}
+                </Link>
+              )}
               <Link className="library-nav-link" to="/library">📚 הספרים שלי</Link>
               {user ? (
                 <button className="account-btn" onClick={logout}>התנתקות</button>
@@ -326,6 +345,15 @@ function Navbar({
           >
             הספרייה שלי
           </Link>
+
+          {user && (
+            <Link
+              to="/cart"
+              onClick={() => setMobileOpen(false)}
+            >
+              עגלת הקניות {cartCount > 0 ? `(${cartCount})` : ''}
+            </Link>
+          )}
 
         </nav>
 

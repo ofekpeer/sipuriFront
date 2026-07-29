@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 
 import { getPaymentRequest } from '../../services/bookApi';
+import { useCart } from '../../context/CartContext';
 import './PaymentResult.css';
 
 function PaymentResult() {
+  const { refreshCart } = useCart();
   const [params] = useSearchParams();
   const paymentId = params.get('payment');
   const requestedOutcome = params.get('outcome');
@@ -21,6 +23,9 @@ function PaymentResult() {
       try {
         const response = await getPaymentRequest(paymentId);
         setPayment(response.data);
+        if (response.data?.status === 'paid') {
+          await refreshCart({ silent: true });
+        }
       } catch (_) {
         setPayment(null);
       } finally {
@@ -29,7 +34,7 @@ function PaymentResult() {
     }
 
     loadPayment();
-  }, [paymentId]);
+  }, [paymentId, refreshCart]);
 
   if (loading) {
     return <main className="payment-result"><p>מאמתים את התשלום שלך...</p></main>;
@@ -37,7 +42,10 @@ function PaymentResult() {
 
   const paid = payment?.status === 'paid';
   const cancelled = requestedOutcome === 'cancel' || payment?.status === 'cancelled';
-  const bookPath = payment?.bookId ? `/book/${payment.bookId}` : '/library';
+  const purchasedSeveralBooks = payment?.bookIds?.length > 1;
+  const bookPath = purchasedSeveralBooks
+    ? '/library'
+    : payment?.bookId ? `/book/${payment.bookId}` : '/library';
 
   return (
     <main className="payment-result" dir="rtl">
@@ -46,13 +54,17 @@ function PaymentResult() {
         <h1>{paid ? 'התשלום התקבל בהצלחה!' : cancelled ? 'התשלום בוטל' : 'התשלום לא הושלם'}</h1>
         <p>
           {paid
-            ? 'הספר המלא נפתח עבורך עכשיו. קריאה נעימה!'
+            ? purchasedSeveralBooks
+              ? 'כל הספרים שרכשת נפתחו ונשמרו בספרייה שלך. קריאה נעימה!'
+              : 'הספר המלא נפתח עבורך עכשיו. קריאה נעימה!'
             : cancelled
               ? 'לא חויבת. אפשר לחזור לספר ולנסות שוב מתי שנוח.'
               : 'לא חויבת או שהתשלום לא אומת. אפשר לנסות שוב.'}
         </p>
         <Link className="payment-result-button" to={bookPath}>
-          {paid ? 'לקריאת הספר המלא' : 'חזרה לספר'}
+          {paid
+            ? purchasedSeveralBooks ? 'לספרייה שלי' : 'לקריאת הספר המלא'
+            : 'חזרה לספר'}
         </Link>
       </section>
     </main>

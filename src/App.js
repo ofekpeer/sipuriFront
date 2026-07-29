@@ -19,12 +19,14 @@ import ScrollToTop from './components/ScrollToTop/ScrollToTop';
 import PrivacyPolicy from './pages/PrivacyPolicy/PrivacyPolicy';
 import FAQ from './pages/FAQ/FAQ';
 import HowItWorks from './pages/HowItWorks/HowItWorks';
+import GoogleOAuthRedirect from './components/auth/GoogleOAuthRedirect';
 
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
       <ScrollToTop />
+      <GoogleOAuthRedirect />
       <Routes>
         <Route element={<HomeLayout />}>
           <Route path="/" element={<Home />} />

@@ -40,7 +40,7 @@ function Hero() {
             <div className="cover">
               <div className="bookmark" />
               <span className="cover-kicker">SIPURI</span>
-              <div className="monster"><img src={Fox} alt="דמות השועל של Sipuri" /></div>
+              <div className="monster"><img src={Fox} alt="דמות השועל של Sipuri" decoding="async" fetchPriority="high" /></div>
               <h2>ההרפתקה<br />של נועם</h2>
               <span className="cover-spark cover-spark--one">✦</span>
               <span className="cover-spark cover-spark--two">✧</span>

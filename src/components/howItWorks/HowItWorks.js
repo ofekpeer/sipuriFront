@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 import "./HowItWorks.css";
-import aboutKid from "../../assets/howItWorks/aboutkid.png";
-import magicStart from "../../assets/howItWorks/magicstart.png";
-import book from "../../assets/howItWorks/bookcreate.png";
-import delivery from "../../assets/howItWorks/delivery.png";
+import aboutKid from "../../assets/howItWorks/aboutkid.jpg";
+import magicStart from "../../assets/howItWorks/magicstart.jpg";
+import book from "../../assets/howItWorks/bookcreate.jpg";
+import delivery from "../../assets/howItWorks/delivery.jpg";
 
 const steps = [
   { image: aboutKid, title: "מכירים את הגיבור או הגיבורה", text: "ממלאים שם, גיל, תחביבים וכל פרט קטן שהופך את הסיפור לאישי.", accent: "violet" },
@@ -31,7 +31,7 @@ function HowItWorks() {
           <article className={`magic-step magic-step--${step.accent}`} key={step.title}>
             <span className="magic-step__number">0{index + 1}</span>
             <div className="magic-circle">
-              <img className="magic-image" src={step.image} alt="" />
+              <img className="magic-image" src={step.image} alt="" loading="lazy" decoding="async" />
             </div>
             <h3>{step.title}</h3>
             <p>{step.text}</p>

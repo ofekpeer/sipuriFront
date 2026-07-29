@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { FaArrowLeft, FaArrowRight, FaQuoteRight, FaStar } from "react-icons/fa";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
+import useMediaQuery from "../../hooks/useMediaQuery";
 import "swiper/css";
 import "swiper/css/pagination";
 import "./Testimonials.css";
@@ -53,6 +54,7 @@ const reviews = [
 
 function Testimonials() {
   const swiperRef = useRef(null);
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   return (
     <section id="reviews" className="testimonials" dir="rtl">
@@ -71,7 +73,7 @@ function Testimonials() {
         spaceBetween={22}
         slidesPerView={1}
         pagination={{ clickable: true }}
-        autoplay={{ delay: 5200, disableOnInteraction: false, pauseOnMouseEnter: true }}
+        autoplay={isMobile ? false : { delay: 5200, disableOnInteraction: false, pauseOnMouseEnter: true }}
         breakpoints={{
           700: { slidesPerView: 2 },
           1080: { slidesPerView: 3 },

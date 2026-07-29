@@ -2,15 +2,16 @@ import './AdventureSection.css';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
+import useMediaQuery from '../../hooks/useMediaQuery';
 
 import 'swiper/css';
 
-import dino from '../../assets/adventures/dino.png';
-import space from '../../assets/adventures/space.png';
-import magic from '../../assets/adventures/magic.png';
-import pirates from '../../assets/adventures/pirates.png';
-import jungle from '../../assets/adventures/jungle.png';
-import ocean from '../../assets/adventures/ocean.png';
+import dino from '../../assets/adventures/dino.jpg';
+import space from '../../assets/adventures/space.jpg';
+import magic from '../../assets/adventures/magic.jpg';
+import pirates from '../../assets/adventures/pirates.jpg';
+import jungle from '../../assets/adventures/jungle.jpg';
+import ocean from '../../assets/adventures/ocean.jpg';
 
 const adventures = [
   {
@@ -46,6 +47,8 @@ const adventures = [
 ];
 
 function AdventureSection() {
+  const isMobile = useMediaQuery('(max-width: 768px)');
+
   return (
     <section className="adventure-section">
       <div className="stars">
@@ -75,7 +78,7 @@ function AdventureSection() {
       <Swiper
         modules={[Autoplay]}
         loop={true}
-        speed={5000}
+        speed={isMobile ? 6500 : 5000}
         autoplay={{
           delay: 0,
           disableOnInteraction: false,
@@ -116,7 +119,7 @@ function AdventureSection() {
         {adventures.map((item, index) => (
           <SwiperSlide key={index}>
             <div className="adventure-card">
-              <img src={item.image} alt={item.title} />
+              <img src={item.image} alt={item.title} loading="lazy" decoding="async" />
 
               <div className="overlay">
                 <div className="card-badge">✨ חדש</div>

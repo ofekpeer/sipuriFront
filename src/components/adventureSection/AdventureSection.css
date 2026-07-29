@@ -183,19 +183,19 @@
 
 }
 
-.swiper{
+.adventure-slider.swiper{
 
     overflow:visible;
 
 }
 
-.swiper-wrapper{
+.adventure-slider .swiper-wrapper{
 
     transition-timing-function:linear !important;
 
 }
 
-.swiper-slide{
+.adventure-slider .swiper-slide{
 
     height:auto;
 
@@ -333,7 +333,21 @@
 
 @media(max-width:768px){
 
-    .adventure-section{
+.adventure-section::before,
+.adventure-section::after{
+display:none;
+}
+
+.adventure-section .stars span{
+animation:none !important;
+box-shadow:none;
+}
+
+.section-badge{
+backdrop-filter:none;
+}
+
+.adventure-section{
 
         padding:80px 0;
 
@@ -569,13 +583,13 @@
 
 }
 
-.swiper{
+.adventure-slider.swiper{
 
     overflow:visible;
 
 }
 
-.swiper-slide{
+.adventure-slider .swiper-slide{
 
     height:auto;
 

@@ -5,9 +5,10 @@ import Features from '../../components/features/Features';
 import Testimonials from '../../components/testimonials/Testimonials';
 import AdventureSection from '../../components/adventureSection/AdventureSection';
 import OurStory from '../../components/ourStory/OurStory';  
+import './Home.css';
 function Home() {
   return (
-    <>
+    <main className="home-page">
       <Hero />
       <HowItWorks />
       <AdventureSection />
@@ -15,7 +16,7 @@ function Home() {
       <Books />
       <Features />
       <Testimonials />
-    </>
+    </main>
   );
 }
 

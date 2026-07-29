@@ -2,14 +2,15 @@ import './Books.css';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow, Pagination } from 'swiper/modules';
+import useMediaQuery from '../../hooks/useMediaQuery';
 
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
 
-import book1 from '../../assets/books/book1.png';
-import book2 from '../../assets/books/book2.png';
-import book3 from '../../assets/books/book3.png';
+import book1 from '../../assets/books/book1.jpg';
+import book2 from '../../assets/books/book2.jpg';
+import book3 from '../../assets/books/book3.jpg';
 
 const books = [
   {
@@ -80,6 +81,8 @@ const books = [
 ];
 
 function Books() {
+  const isMobile = useMediaQuery('(max-width: 768px)');
+
   return (
     <section className="books">
       <span className="books-badge">📚 ספרים שנוצרו</span>
@@ -92,12 +95,12 @@ function Books() {
       <p>הצצה לכמה מהספרים שנוצרו בסיפורי</p>
 
       <Swiper
-        effect={'coverflow'}
+        effect={isMobile ? 'slide' : 'coverflow'}
         grabCursor={true}
         centeredSlides={true}
         slidesPerView={'auto'}
         centerInsufficientSlides={true}
-        loop={true}
+        loop={!isMobile}
         pagination={{
           clickable: true,
         }}
@@ -121,7 +124,7 @@ function Books() {
         {books.map((book, index) => (
           <SwiperSlide key={index} className="book-slide">
             <div className="book-card">
-              <img src={book.image} alt={book.title} />
+              <img src={book.image} alt={book.title} loading="lazy" decoding="async" />
 
               <div className="book-info">
                 <h3>{book.title}</h3>

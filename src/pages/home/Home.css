@@ -1,0 +1,10 @@
+.home-page > section:not(.hero) {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 780px;
+}
+
+@media (max-width: 768px) {
+  .home-page > section:not(.hero) {
+    contain-intrinsic-size: auto 960px;
+  }
+}

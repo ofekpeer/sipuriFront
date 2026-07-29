@@ -47,17 +47,27 @@ function Navbar({
   };
 
   useEffect(() => {
+    let frameId = null;
 
-    const handleScroll = () => {
-
-      setScrolled(window.scrollY > 30);
-
+    const updateNavbar = () => {
+      frameId = null;
+      const nextScrolled = window.scrollY > 30;
+      setScrolled((current) => current === nextScrolled ? current : nextScrolled);
     };
 
-    window.addEventListener("scroll", handleScroll);
+    const handleScroll = () => {
+      if (frameId === null) {
+        frameId = window.requestAnimationFrame(updateNavbar);
+      }
+    };
 
-    return () => window.removeEventListener("scroll", handleScroll);
+    updateNavbar();
+    window.addEventListener("scroll", handleScroll, { passive: true });
 
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (frameId !== null) window.cancelAnimationFrame(frameId);
+    };
   }, []);
 
   useEffect(() => {

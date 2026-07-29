@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { FaArrowLeft, FaHeart, FaMagic, FaStar } from "react-icons/fa";
 import "./OurStory.css";
-import storyImage from "../../assets/story/story-image.png";
+import storyImage from "../../assets/story/story-image.jpg";
 
 const values = [
   { icon: <FaMagic />, title: "מותאם אישית", text: "לשם, לחלומות ולתחביבים" },
@@ -46,7 +46,7 @@ function OurStory() {
 
           <div className="story-visual">
             <div className="story-image">
-              <img src={storyImage} alt="ילד קורא סיפור אישי של Sipuri" />
+              <img src={storyImage} alt="ילד קורא סיפור אישי של Sipuri" loading="lazy" decoding="async" />
             </div>
             <div className="story-visual__tag">✦ נכתב במיוחד בשבילם</div>
             <div className="story-visual__spark story-visual__spark--one">✦</div>

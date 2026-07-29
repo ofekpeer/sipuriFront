@@ -68,6 +68,8 @@ function Footer() {
             <img
               src={mascot}
               alt="Sipuri"
+              loading="lazy"
+              decoding="async"
             />
 
           </div>

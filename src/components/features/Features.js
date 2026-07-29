@@ -1,8 +1,8 @@
 import "./Features.css";
-import story from "../../assets/features/story.png";
-import art from "../../assets/features/art.png";
-import gift from "../../assets/features/gift.png";
-import shipping from "../../assets/features/shipping.png";
+import story from "../../assets/features/story.jpg";
+import art from "../../assets/features/art.jpg";
+import gift from "../../assets/features/gift.jpg";
+import shipping from "../../assets/features/shipping.jpg";
 const features = [
 
     {
@@ -75,6 +75,8 @@ function Features(){
                                 <img
                                     src={feature.image}
                                     alt={feature.title}
+                                    loading="lazy"
+                                    decoding="async"
                                 />
 
                             </div>

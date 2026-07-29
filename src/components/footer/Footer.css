@@ -259,6 +259,21 @@
 }
 
 @media (max-width: 950px) {
+  .footer-glow {
+    display: none;
+  }
+
+  .footer-cta {
+    backdrop-filter: none;
+  }
+
+  .footer-mascot img,
+  .footer::before,
+  .footer::after,
+  .footer .star {
+    animation: none !important;
+  }
+
   .footer-cta {
     flex-direction: column-reverse;
 

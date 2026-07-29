@@ -179,4 +179,6 @@
   .story-value small { display: block; margin-top: 2px; }
   .story-visual__tag { bottom: -11px; left: -2px; font-size: 0.8rem; }
   .story-image { border-radius: 25px; border-width: 6px; }
+  .our-story__glow { display: none; }
+  .story-visual__spark { animation: none; }
 }

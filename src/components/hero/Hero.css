@@ -157,4 +157,9 @@
   .hero-promises { flex-direction: column; align-items: flex-start; margin-right: 11px; }
   .hero-visual { min-height: 390px; }.hero-orbit--one { width: 340px; height: 340px; }.hero-orbit--two { width: 278px; height: 278px; }
   .cover { width: 239px; height: 343px; padding: 23px 13px; border-radius: 20px; }.hero-book { border-radius: 21px; }.hero-book__spine { left: -9px; width: 11px; }.cover-kicker { font-size: .9rem; }.monster { width: 150px; height: 150px; }.monster img { width: 142px; }.cover h2 { font-size: 1.35rem; }.bookmark { right: 20px; width: 14px; height: 57px; }.bookmark::after { border-right-width: 7px; border-left-width: 7px; border-top-width: 9px; }.hero-floating-note { right: 0; bottom: 30px; font-size: .72rem; }.hero-floating-chip { top: 35px; left: 0; font-size: .72rem; }
+  .hero-book,
+  .hero-orbit,
+  .hero-star,
+  .cover-spark { animation: none !important; }
+  .hero-orbit { opacity: .65; }
 }

@@ -115,4 +115,5 @@
   .magic-step h3 { min-height: 0; }
   .how-actions { flex-direction: column; gap: 7px; }
   .how-actions__primary { width: 100%; }
+  .how-orb { display: none; }
 }

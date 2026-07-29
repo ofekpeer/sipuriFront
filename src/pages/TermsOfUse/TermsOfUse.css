@@ -1,0 +1,139 @@
+.terms-page {
+  min-height: 100vh;
+  padding: 132px 20px 72px;
+  color: #272044;
+  background:
+    radial-gradient(circle at 12% 12%, rgba(130, 96, 255, 0.2), transparent 27rem),
+    radial-gradient(circle at 88% 22%, rgba(255, 181, 97, 0.16), transparent 24rem),
+    #f5f7ff;
+}
+
+.terms-hero,
+.terms-content {
+  width: min(100%, 980px);
+  margin: 0 auto;
+}
+
+.terms-hero {
+  text-align: center;
+  padding: 38px 24px 42px;
+}
+
+.terms-hero__eyebrow {
+  display: inline-flex;
+  padding: 8px 14px;
+  border-radius: 999px;
+  color: #6848e8;
+  background: rgba(112, 78, 240, 0.1);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.terms-hero h1 {
+  margin: 18px 0 12px;
+  font-size: clamp(2.25rem, 6vw, 4rem);
+  line-height: 1.1;
+  color: #352462;
+}
+
+.terms-hero p {
+  max-width: 610px;
+  margin: 0 auto;
+  color: #625b7e;
+  font-size: 1.08rem;
+  line-height: 1.8;
+}
+
+.terms-hero__date {
+  display: block;
+  margin-top: 18px;
+  color: #81799c;
+  font-size: 0.9rem;
+}
+
+.terms-content {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.38fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 26px;
+}
+
+.terms-content article,
+.terms-note {
+  border: 1px solid rgba(87, 65, 155, 0.1);
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 20px 55px rgba(48, 35, 99, 0.1);
+  border-radius: 25px;
+}
+
+.terms-content article {
+  padding: clamp(28px, 5vw, 56px);
+}
+
+.terms-content h2 {
+  margin: 35px 0 10px;
+  color: #3d2c72;
+  font-size: 1.25rem;
+}
+
+.terms-content h2:first-child {
+  margin-top: 0;
+}
+
+.terms-content p {
+  margin: 0;
+  color: #5e5873;
+  font-size: 1rem;
+  line-height: 1.9;
+}
+
+.terms-content p + p {
+  margin-top: 13px;
+}
+
+.terms-note {
+  position: sticky;
+  top: 112px;
+  padding: 24px;
+  color: #51437f;
+  background: linear-gradient(145deg, #fff9eb, #f6f1ff);
+}
+
+.terms-note span {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  margin-bottom: 12px;
+  border-radius: 12px;
+  background: #7657ee;
+  color: white;
+}
+
+.terms-note p {
+  color: #51437f;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.8;
+}
+
+@media (max-width: 760px) {
+  .terms-page {
+    padding: 96px 15px 45px;
+  }
+
+  .terms-hero {
+    padding: 30px 8px 32px;
+  }
+
+  .terms-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .terms-note {
+    position: static;
+    width: 100%;
+  }
+}

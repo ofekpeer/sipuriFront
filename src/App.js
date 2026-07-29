@@ -14,14 +14,24 @@ import AuthPage from './pages/Auth/AuthPage';
 import Library from './pages/Library/Library';
 import BookEditor from './pages/BookEditor/BookEditor';
 import PaymentResult from './pages/PaymentResult/PaymentResult';
+import TermsOfUse from './pages/TermsOfUse/TermsOfUse';
+import ScrollToTop from './components/ScrollToTop/ScrollToTop';
+import PrivacyPolicy from './pages/PrivacyPolicy/PrivacyPolicy';
+import FAQ from './pages/FAQ/FAQ';
+import HowItWorks from './pages/HowItWorks/HowItWorks';
 
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
+      <ScrollToTop />
       <Routes>
         <Route element={<HomeLayout />}>
           <Route path="/" element={<Home />} />
+          <Route path="/terms" element={<TermsOfUse />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/how-it-works" element={<HowItWorks />} />
         </Route>
 
         <Route element={<CreateBookLayout />}>

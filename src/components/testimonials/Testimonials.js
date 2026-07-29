@@ -2,7 +2,7 @@ import "./Testimonials.css";
 
 function Testimonials() {
   return (
-    <section className="testimonials">
+    <section id="reviews" className="testimonials">
 
       <div className="title">
 

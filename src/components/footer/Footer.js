@@ -91,7 +91,7 @@ function Footer() {
             </p>
 
           </div>
-                    <div>
+          <div>
 
             <h4>
 
@@ -111,17 +111,11 @@ function Footer() {
 
             </Link>
 
-            <a href="#how">
+            <Link to="/how-it-works">
 
               איך זה עובד
 
-            </a>
-
-            <a href="#books">
-
-              ספרים
-
-            </a>
+            </Link>
 
           </div>
                     <div>
@@ -132,29 +126,23 @@ function Footer() {
 
             </h4>
 
-            <a href="/">
+            <Link to="/faq">
 
               שאלות נפוצות
 
-            </a>
+            </Link>
 
-            <a href="/">
+            <Link to="/privacy">
 
               מדיניות פרטיות
 
-            </a>
+            </Link>
 
-            <a href="/">
+            <Link to="/terms">
 
               תנאי שימוש
 
-            </a>
-
-            <a href="/">
-
-              צור קשר
-
-            </a>
+            </Link>
 
           </div>
                     <div>
@@ -165,26 +153,10 @@ function Footer() {
 
             </h4>
 
-            <div className="footer-socials">
-
-              <a href="/">
-
-                <FaInstagram />
-
-              </a>
-
-              <a href="/">
-
-                <FaFacebookF />
-
-              </a>
-
-              <a href="/">
-
-                <FaTiktok />
-
-              </a>
-
+            <div className="footer-socials" aria-label="רשתות חברתיות">
+              <span title="Instagram אינו זמין עדיין"><FaInstagram /></span>
+              <span title="Facebook אינו זמין עדיין"><FaFacebookF /></span>
+              <span title="TikTok אינו זמין עדיין"><FaTiktok /></span>
             </div>
 
           </div>

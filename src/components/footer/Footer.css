@@ -213,7 +213,8 @@
   gap: 16px;
 }
 
-.footer-socials a {
+.footer-socials a,
+.footer-socials span {
   width: 52px;
 
   height: 52px;

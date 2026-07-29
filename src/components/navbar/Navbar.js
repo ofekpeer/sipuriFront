@@ -100,21 +100,17 @@ function Navbar({
 
             <nav className="desktop-nav">
 
-              <a href="#how">
+              <Link to="/how-it-works">
                 איך זה עובד
-              </a>
+              </Link>
 
-              <a href="#books">
-                ספרים
-              </a>
-
-              <a href="#story">
+              <Link to="/#story">
                 הסיפור שלנו
-              </a>
+              </Link>
 
-              <a href="#reviews">
+              <Link to="/#reviews">
                 ביקורות
-              </a>
+              </Link>
 
               <Link to="/library">
                 הספרייה שלי
@@ -273,53 +269,26 @@ function Navbar({
             דף הבית
           </Link>
 
-          <a
-
-            href="#how"
-
+          <Link
+            to="/how-it-works"
             onClick={() => setMobileOpen(false)}
-
           >
-
             איך זה עובד
+          </Link>
 
-          </a>
-
-          <a
-
-            href="#books"
-
+          <Link
+            to="/#story"
             onClick={() => setMobileOpen(false)}
-
           >
-
-            ספרים
-
-          </a>
-
-          <a
-
-            href="#story"
-
-            onClick={() => setMobileOpen(false)}
-
-          >
-
             הסיפור שלנו
+          </Link>
 
-          </a>
-
-          <a
-
-            href="#reviews"
-
+          <Link
+            to="/#reviews"
             onClick={() => setMobileOpen(false)}
-
           >
-
             ביקורות
-
-          </a>
+          </Link>
 
           <Link
             to="/library"

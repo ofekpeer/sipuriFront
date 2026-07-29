@@ -4,7 +4,7 @@ import storyImage from '../../assets/story/story-image.png';
 
 function OurStory() {
   return (
-    <section className="our-story">
+    <section id="story" className="our-story">
       <div className="story-container">
         <div className="story-header">
           <span>✨ כל סיפור גדול מתחיל בחלום קטן</span>

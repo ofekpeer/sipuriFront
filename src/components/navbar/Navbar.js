@@ -1,6 +1,6 @@
 import "./Navbar.css";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import {
   FaBars,
@@ -22,9 +22,29 @@ function Navbar({
   const isAuth = variant === "auth" && !showProgress;
   const progress = (step / totalSteps) * 100;
   const { user, logout } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const scrollToHomeSection = (sectionId) => (event) => {
+    event.preventDefault();
+    setMobileOpen(false);
+
+    if (location.pathname !== "/") {
+      navigate(`/#${sectionId}`);
+      return;
+    }
+
+    const section = document.getElementById(sectionId);
+    if (!section) return;
+
+    const navbarOffset = 96;
+    const top = section.getBoundingClientRect().top + window.scrollY - navbarOffset;
+    window.scrollTo({ top, behavior: "smooth" });
+    window.history.replaceState(null, "", `/#${sectionId}`);
+  };
 
   useEffect(() => {
 
@@ -104,11 +124,11 @@ function Navbar({
                 איך זה עובד
               </Link>
 
-              <Link to="/#story">
+              <Link to="/#story" onClick={scrollToHomeSection("story")}>
                 הסיפור שלנו
               </Link>
 
-              <Link to="/#reviews">
+              <Link to="/#reviews" onClick={scrollToHomeSection("reviews")}>
                 ביקורות
               </Link>
 
@@ -278,14 +298,14 @@ function Navbar({
 
           <Link
             to="/#story"
-            onClick={() => setMobileOpen(false)}
+            onClick={scrollToHomeSection("story")}
           >
             הסיפור שלנו
           </Link>
 
           <Link
             to="/#reviews"
-            onClick={() => setMobileOpen(false)}
+            onClick={scrollToHomeSection("reviews")}
           >
             ביקורות
           </Link>

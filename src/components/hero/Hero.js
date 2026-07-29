@@ -1,141 +1,56 @@
-import "./Hero.css";
 import { Link } from "react-router-dom";
-import { FaArrowLeft } from "react-icons/fa";
-
+import { FaArrowLeft, FaCheck } from "react-icons/fa";
+import "./Hero.css";
 import Fox from "../../assets/sipuri-fox.png";
 
 function Hero() {
   return (
-    <section className="hero">
-
-      <div className="hero-background"></div>
-
-      <div className="hero-stars">
-
-    <span className="star s1"></span>
-    <span className="star s2"></span>
-    <span className="star s3"></span>
-    <span className="star s4"></span>
-    <span className="star s5"></span>
-    <span className="star s6"></span>
-    <span className="star s7"></span>
-    <span className="star s8"></span>
-
-</div>
+    <section className="hero" dir="rtl">
+      <div className="hero-background" />
+      <div className="hero-grid" aria-hidden="true" />
+      <span className="hero-star hero-star--one" aria-hidden="true">✦</span>
+      <span className="hero-star hero-star--two" aria-hidden="true">✧</span>
+      <span className="hero-star hero-star--three" aria-hidden="true">✦</span>
 
       <div className="hero-content">
-
-        {/* צד שמאל */}
-
-        <div className="hero-left">
-
-          <div className="hero-badge">
-            ✨ יותר מ־1,200 ספרים כבר נוצרו
-          </div>
-
-          <h1>
-            כל ילד יכול להיות
-            <br />
-            <span>הגיבור של הסיפור שלו</span>
-          </h1>
-
+        <div className="hero-copy">
+          <span className="hero-badge">✦ סיפורים אישיים שנוצרים במיוחד בשבילכם</span>
+          <h1>כל ילד יכול להיות<br /><em>הגיבור של הסיפור שלו</em></h1>
           <p>
-            צרו ספר ילדים אישי בעזרת AI, עם עלילה מקורית,
-            איורים קסומים והרפתקה שהילד שלכם לעולם לא ישכח.
+            יוצרים ספר ילדים אישי עם עלילה מקורית, איורים קסומים והרפתקה שבה
+            הילד או הילדה שלכם נמצאים במרכז.
           </p>
 
           <div className="hero-buttons">
-
-            <Link to="/create-book">
-              <button className="primary-btn">
-                ✨ צור ספר עכשיו
-              </button>
-            </Link>
-
-            <button className="secondary-btn">
-              לראות דוגמא
-              <FaArrowLeft />
-            </button>
-
+            <Link className="primary-btn" to="/create-book">יוצרים ספר אישי <FaArrowLeft aria-hidden="true" /></Link>
+            <Link className="secondary-btn" to="/how-it-works">איך זה עובד?</Link>
           </div>
 
-          <div className="hero-info">
-
-            <div>
-              <h2>1200+</h2>
-              <span>ספרים</span>
-            </div>
-
-            <div>
-              <h2>4.9★</h2>
-              <span>דירוג</span>
-            </div>
-
-            <div>
-              <h2>98%</h2>
-              <span>לקוחות מרוצים</span>
-            </div>
-
+          <div className="hero-promises">
+            <span><FaCheck aria-hidden="true" /> מותאם אישית לילד או לילדה</span>
+            <span><FaCheck aria-hidden="true" /> נשמר בספרייה האישית שלכם</span>
           </div>
-
         </div>
 
-        {/* צד ימין */}
-
-        <div className="hero-right">
-
-          <div className="hero-circle"></div>
-
-          <div className="book">
-
+        <div className="hero-visual" aria-label="דוגמה לכריכה של ספר אישי">
+          <div className="hero-orbit hero-orbit--one" />
+          <div className="hero-orbit hero-orbit--two" />
+          <div className="hero-book">
+            <div className="hero-book__spine" />
             <div className="cover">
-
-              <div className="bookmark"></div>
-
-              <div className="logo">
-                סיפורי
-              </div>
-
-              <div className="monster">
-                <img src={Fox} alt="Sipuri Fox" />
-              </div>
-
-              <h3>
-                ההרפתקה של נועם
-              </h3>
-
-              <div className="sparkle sparkle1">
-                ✦
-              </div>
-
-              <div className="sparkle sparkle2">
-                ✦
-              </div>
-
-              <div className="sparkle sparkle3">
-                ✦
-              </div>
-
+              <div className="bookmark" />
+              <span className="cover-kicker">SIPURI</span>
+              <div className="monster"><img src={Fox} alt="דמות השועל של Sipuri" /></div>
+              <h2>ההרפתקה<br />של נועם</h2>
+              <span className="cover-spark cover-spark--one">✦</span>
+              <span className="cover-spark cover-spark--two">✧</span>
+              <span className="cover-spark cover-spark--three">✦</span>
             </div>
-
           </div>
-
-          <div className="star star1">
-            ⭐
-          </div>
-
-          <div className="star star2">
-            ✨
-          </div>
-
-          <div className="star star3">
-            💜
-          </div>
-
+          <div className="hero-floating-note">💜 ספר שהוא רק שלו</div>
+          <div className="hero-floating-chip">✨ דמיון ללא גבולות</div>
         </div>
-
       </div>
-
     </section>
   );
 }

@@ -1,112 +1,50 @@
+import { Link } from "react-router-dom";
+import { FaArrowLeft } from "react-icons/fa";
 import "./HowItWorks.css";
-import aboutkid from "../../assets/howItWorks/aboutkid.png";
-import magicstart from "../../assets/howItWorks/magicstart.png";
+import aboutKid from "../../assets/howItWorks/aboutkid.png";
+import magicStart from "../../assets/howItWorks/magicstart.png";
 import book from "../../assets/howItWorks/bookcreate.png";
 import delivery from "../../assets/howItWorks/delivery.png";
+
 const steps = [
-
-    {
-        title: "ספרו לנו על הילד",
-        icon: "👦",
-        image: aboutkid,
-        text: "שם, גיל, תחביבים וכל פרט שהופך את הסיפור לייחודי."
-    },
-
-    {
-        title: "הקסם מתחיל",
-        icon: "✨",
-        image: magicstart,
-        text: "ה-AI יוצר עלילה אישית ואיורים מרהיבים במיוחד."
-    },
-
-    {
-        title: "הספר נוצר",
-        icon: "📖",
-        image: book,
-        text: "צפו בתוצאה והתרשמו מהספר לפני ההזמנה."
-    },
-
-    {
-        title: "מגיע עד הבית",
-        icon: "📦",
-        image: delivery,
-        text: "אנחנו מדפיסים ושולחים את הספר באיכות גבוהה."
-    }
-
+  { image: aboutKid, title: "מכירים את הגיבור או הגיבורה", text: "ממלאים שם, גיל, תחביבים וכל פרט קטן שהופך את הסיפור לאישי.", accent: "violet" },
+  { image: magicStart, title: "בוחרים עולם והרפתקה", text: "בוחרים נושא, מסר וסגנון איור שמתאים בדיוק לחלום הגדול שלהם.", accent: "orange" },
+  { image: book, title: "נותנים לקסם לקרות", text: "המערכת יוצרת סיפור ואיורים אישיים שבהם הילד או הילדה נמצאים במרכז.", accent: "pink" },
+  { image: delivery, title: "קוראים ושומרים בספרייה", text: "כשהספר מוכן הוא מחכה לכם בספרייה האישית — לקריאה חוזרת בכל עת.", accent: "teal" },
 ];
 
-function HowItWorks(){
+function HowItWorks() {
+  return (
+    <section id="how" className="how" dir="rtl">
+      <div className="how-background" />
+      <div className="how-orb how-orb--one" />
+      <div className="how-orb how-orb--two" />
 
-    return(
+      <header className="how-header">
+        <span className="how-badge">✦ ארבעה צעדים פשוטים</span>
+        <h2>כך נוצר <em>הקסם</em></h2>
+        <p>מרעיון קטן ועד לסיפור אישי שהילד או הילדה שלכם לא ירצו להניח מהיד.</p>
+      </header>
 
-        <section id="how" className="how">
-
-            <div className="how-background"></div>
-
-            <div className="how-header">
-
-                <span className="how-badge">
-
-                    ✨ תוך פחות מ־3 דקות
-
-                </span>
-
-                <h2>
-
-                    כך נוצר
-                    <span> הקסם</span>
-
-                </h2>
-
-                <p>
-
-                    ארבעה צעדים פשוטים והילד שלכם הופך לגיבור של ספר אמיתי.
-
-                </p>
-
+      <div className="magic-line">
+        {steps.map((step, index) => (
+          <article className={`magic-step magic-step--${step.accent}`} key={step.title}>
+            <span className="magic-step__number">0{index + 1}</span>
+            <div className="magic-circle">
+              <img className="magic-image" src={step.image} alt="" />
             </div>
+            <h3>{step.title}</h3>
+            <p>{step.text}</p>
+          </article>
+        ))}
+      </div>
 
-            <div className="magic-line">
-
-                {
-
-                    steps.map((step,index)=>(
-
-                        <div
-                            className="magic-step"
-                            key={index}
-                        >
-
-                            <div className="magic-circle">
-
-                               <img className="magic-image" src={step.image} alt={step.title} />
-
-                            </div>
-
-                            <h3>
-
-                                {step.title}
-
-                            </h3>
-
-                            <p>
-
-                                {step.text}
-
-                            </p>
-
-                        </div>
-
-                    ))
-
-                }
-
-            </div>
-
-        </section>
-
-    );
-
+      <div className="how-actions">
+        <Link className="how-actions__primary" to="/create-book">מתחילים ליצור ספר <FaArrowLeft aria-hidden="true" /></Link>
+        <Link className="how-actions__secondary" to="/how-it-works">לכל התהליך בפירוט</Link>
+      </div>
+    </section>
+  );
 }
 
 export default HowItWorks;

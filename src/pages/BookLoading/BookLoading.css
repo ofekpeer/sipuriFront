@@ -4,7 +4,7 @@
   justify-content: center;
   align-items: center;
   background: linear-gradient(135deg, #fff8ef 0%, #fdf3ff 100%);
-  padding: 24px;
+  padding: calc(var(--navbar-height) + 24px) 24px 24px;
 }
 
 .loading-card {

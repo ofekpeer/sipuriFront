@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { useAuth } from '../../context/AuthContext';
+import { warmAuthApi } from '../../services/authApi';
 import Navbar from '../../components/navbar/Navbar';
 import './AuthPage.css';
 
@@ -13,6 +14,12 @@ function AuthPage({ mode }) {
   const [form, setForm] = useState({ name: '', email: '', password: '' });
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    warmAuthApi().catch(() => {
+      // The login request will show a useful error if the API remains unavailable.
+    });
+  }, []);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);

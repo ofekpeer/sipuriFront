@@ -42,6 +42,14 @@ export function getBookAssetUrl(path) {
   return /^https?:\/\//i.test(path) ? path : `${API_URL}${path}`;
 }
 
+export async function warmBookApi() {
+  const response = await fetchWithTimeout(`${API_URL}/health`, {}, 15_000);
+
+  if (!response.ok) {
+    throw new Error('Book API is unavailable');
+  }
+}
+
 export async function createBookRequest(formData, submissionId) {
   const form = new FormData();
   form.append('bookData', JSON.stringify(formData));

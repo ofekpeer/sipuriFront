@@ -1,43 +1,102 @@
-import "./Navbar.css";
-import { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
-import { useCart } from "../../context/CartContext";
+import './Navbar.css';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
-  FaBars,
-  FaTimes,
   FaArrowLeft,
+  FaBars,
+  FaBookOpen,
+  FaHome,
+  FaLock,
+  FaMagic,
   FaShoppingCart,
-} from "react-icons/fa";
+  FaSignOutAlt,
+  FaTimes,
+  FaUserCircle,
+} from 'react-icons/fa';
 
-import Fox from "../../assets/sipuri-fox-logo.png";
+import { useAuth } from '../../context/AuthContext';
+import { useCart } from '../../context/CartContext';
+import Fox from '../../assets/sipuri-fox-logo.png';
+
+const MARKETING_PATHS = new Set([
+  '/',
+  '/terms',
+  '/privacy',
+  '/faq',
+  '/how-it-works',
+]);
+
+function getAutomaticVariant(pathname) {
+  if (pathname === '/login' || pathname === '/register') return 'auth';
+  if (pathname.includes('/checkout') || pathname === '/payment/result') {
+    return 'checkout';
+  }
+  if (MARKETING_PATHS.has(pathname)) return 'home';
+  return 'app';
+}
 
 function Navbar({
   showProgress = false,
   step = 1,
   totalSteps = 5,
-  variant = "home",
+  variant = 'auto',
 }) {
-
-  const isHome = variant === "home" && !showProgress;
-  const isApp = variant === "app" && !showProgress;
-  const isAuth = variant === "auth" && !showProgress;
-  const progress = (step / totalSteps) * 100;
   const { user, logout } = useAuth();
   const { summary: cartSummary } = useCart();
-  const cartCount = cartSummary?.itemCount || 0;
   const location = useLocation();
   const navigate = useNavigate();
+  const previousBodyOverflow = useRef('');
 
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  const resolvedVariant = showProgress
+    ? 'progress'
+    : variant === 'auto'
+      ? getAutomaticVariant(location.pathname)
+      : variant;
+
+  const cartCount = cartSummary?.itemCount || 0;
+  const progress = Math.min(100, Math.max(0, (step / totalSteps) * 100));
+  const isSimpleNavbar = resolvedVariant === 'auth';
+  const canOpenMenu = ['home', 'app', 'checkout'].includes(resolvedVariant);
+  const showCreateAction = resolvedVariant === 'home' || resolvedVariant === 'app';
+
+  const primaryLinks = useMemo(() => {
+    if (resolvedVariant === 'home') {
+      return [
+        { label: 'איך זה עובד', to: '/how-it-works' },
+        { label: 'הסיפור שלנו', to: '/#story', sectionId: 'story' },
+        { label: 'ביקורות', to: '/#reviews', sectionId: 'reviews' },
+        { label: 'הספרייה שלי', to: '/library' },
+      ];
+    }
+
+    if (resolvedVariant === 'checkout') {
+      return [
+        { label: 'דף הבית', to: '/', icon: FaHome },
+        { label: 'הספרייה שלי', to: '/library', icon: FaBookOpen },
+      ];
+    }
+
+    if (resolvedVariant === 'app') {
+      return [
+        { label: 'דף הבית', to: '/', icon: FaHome },
+        { label: 'הספרייה שלי', to: '/library', icon: FaBookOpen },
+      ];
+    }
+
+    return [];
+  }, [resolvedVariant]);
+
+  const closeMenu = () => setMobileOpen(false);
+
   const scrollToHomeSection = (sectionId) => (event) => {
     event.preventDefault();
-    setMobileOpen(false);
+    closeMenu();
 
-    if (location.pathname !== "/") {
-      navigate(`/#${sectionId}`);
+    if (location.pathname !== '/') {
+      navigate({ pathname: '/', hash: sectionId });
       return;
     }
 
@@ -46,8 +105,16 @@ function Navbar({
 
     const navbarOffset = 96;
     const top = section.getBoundingClientRect().top + window.scrollY - navbarOffset;
-    window.scrollTo({ top, behavior: "smooth" });
-    window.history.replaceState(null, "", `/#${sectionId}`);
+    window.scrollTo({ top, behavior: 'smooth' });
+    window.history.replaceState(null, '', `/#${sectionId}`);
+  };
+
+  const isLinkActive = (item) => {
+    if (item.sectionId) {
+      return location.pathname === '/' && location.hash === `#${item.sectionId}`;
+    }
+    if (item.to === '/') return location.pathname === '/';
+    return location.pathname.startsWith(item.to);
   };
 
   useEffect(() => {
@@ -55,8 +122,8 @@ function Navbar({
 
     const updateNavbar = () => {
       frameId = null;
-      const nextScrolled = window.scrollY > 30;
-      setScrolled((current) => current === nextScrolled ? current : nextScrolled);
+      const nextScrolled = window.scrollY > 24;
+      setScrolled((current) => (current === nextScrolled ? current : nextScrolled));
     };
 
     const handleScroll = () => {
@@ -66,329 +133,266 @@ function Navbar({
     };
 
     updateNavbar();
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener('scroll', handleScroll, { passive: true });
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener('scroll', handleScroll);
       if (frameId !== null) window.cancelAnimationFrame(frameId);
     };
   }, []);
 
   useEffect(() => {
+    closeMenu();
+  }, [location.pathname, location.hash]);
 
-    if (mobileOpen) {
+  useEffect(() => {
+    if (!mobileOpen) return undefined;
 
-      document.body.style.overflow = "hidden";
+    previousBodyOverflow.current = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
 
-    } else {
-
-      document.body.style.overflow = "auto";
-
-    }
-
-    return () => {
-
-      document.body.style.overflow = "auto";
-
+    const closeOnEscape = (event) => {
+      if (event.key === 'Escape') closeMenu();
     };
 
+    window.addEventListener('keydown', closeOnEscape);
+
+    return () => {
+      document.body.style.overflow = previousBodyOverflow.current;
+      window.removeEventListener('keydown', closeOnEscape);
+    };
   }, [mobileOpen]);
 
+  const renderNavLink = (item, mobile = false) => {
+    const Icon = item.icon;
+    const sectionHandler = item.sectionId
+      ? scrollToHomeSection(item.sectionId)
+      : mobile
+        ? closeMenu
+        : undefined;
+
+    return (
+      <Link
+        key={`${mobile ? 'mobile' : 'desktop'}-${item.to}`}
+        to={item.to}
+        onClick={sectionHandler}
+        className={isLinkActive(item) ? 'is-active' : ''}
+        aria-current={isLinkActive(item) ? 'page' : undefined}
+      >
+        {Icon ? <Icon aria-hidden="true" /> : null}
+        <span>{item.label}</span>
+      </Link>
+    );
+  };
+
   return (
-
     <header
-      className={`navbar navbar--${variant} ${showProgress ? "navbar--progress" : ""} ${scrolled ? "navbar-scrolled" : ""}`}
+      className={[
+        'navbar',
+        `navbar--${resolvedVariant}`,
+        scrolled ? 'navbar--scrolled' : '',
+      ].filter(Boolean).join(' ')}
+      dir="rtl"
     >
-
       <div className="navbar-container">
-
-        <Link
-          to="/"
-          className="logo"
-        >
-
-          <div className="logo-circle">
-
-            <img
-              src={Fox}
-              alt="Sipuri"
-            />
-
-          </div>
-
-          <div className="logo-text">
-
-            <h2>Sipuri</h2>
-
-            <span>
-              Personalized Storybooks
-            </span>
-
-          </div>
-
+        <Link to="/" className="navbar-logo" aria-label="Sipuri — דף הבית">
+          <span className="navbar-logo__mark">
+            <img src={Fox} alt="" aria-hidden="true" />
+          </span>
+          <span className="navbar-logo__copy">
+            <strong>Sipuri</strong>
+            <small>Personalized Storybooks</small>
+          </span>
         </Link>
 
-        {isHome && (
-
-          <>
-
-            <nav className="desktop-nav">
-
-              <Link to="/how-it-works">
-                איך זה עובד
-              </Link>
-
-              <Link to="/#story" onClick={scrollToHomeSection("story")}>
-                הסיפור שלנו
-              </Link>
-
-              <Link to="/#reviews" onClick={scrollToHomeSection("reviews")}>
-                ביקורות
-              </Link>
-
-              <Link to="/library">
-                הספרייה שלי
-              </Link>
-
-            </nav>
-
-            <div className="navbar-actions">
-
-              {user && (
-                <Link className="cart-nav-link" to="/cart" aria-label={`עגלה, ${cartCount} פריטים`}>
-                  <FaShoppingCart aria-hidden="true" />
-                  <span className="cart-nav-link__label">עגלה</span>
-                  {cartCount > 0 && <span className="cart-nav-badge">{cartCount}</span>}
-                </Link>
-              )}
-
-              {user ? (
-                <button className="account-btn" onClick={logout}>
-                  התנתקות {user.name ? `· ${user.name}` : ''}
-                </button>
-              ) : (
-                <Link className="account-btn" to="/login">התחברות</Link>
-              )}
-
-              <Link to="/create-book">
-
-                <button className="start-btn">
-
-                  ✨ צור ספר אישי
-
-                </button>
-
-              </Link>
-
-              <button
-                className="menu-btn"
-                onClick={() => setMobileOpen(true)}
-              >
-
-                <FaBars />
-
-              </button>
-
-            </div>
-
-          </>
-
-        )}
-
-        {isApp && (
-          <>
-            <nav className="desktop-nav">
-              <Link to="/">דף הבית</Link>
-              <Link to="/library">הספרייה שלי</Link>
-            </nav>
-
-            <div className="navbar-actions">
-              {user && (
-                <Link className="cart-nav-link" to="/cart" aria-label={`עגלה, ${cartCount} פריטים`}>
-                  <FaShoppingCart aria-hidden="true" />
-                  <span className="cart-nav-link__label">עגלה</span>
-                  {cartCount > 0 && <span className="cart-nav-badge">{cartCount}</span>}
-                </Link>
-              )}
-              <Link className="library-nav-link" to="/library">📚 הספרים שלי</Link>
-              {user ? (
-                <button className="account-btn" onClick={logout}>התנתקות</button>
-              ) : (
-                <Link className="account-btn" to="/login">התחברות</Link>
-              )}
-              <button className="menu-btn" onClick={() => setMobileOpen(true)}>
-                <FaBars />
-              </button>
-            </div>
-          </>
-        )}
-
-        {isAuth && (
-          <div className="navbar-actions">
-            <button className="menu-btn" onClick={() => setMobileOpen(true)}>
-              <FaBars />
-            </button>
-            <Link className="account-btn" to="/">← חזרה לדף הבית</Link>
-          </div>
-        )}
-
-        {showProgress && (
-
+        {resolvedVariant === 'progress' ? (
           <div className="wizard-navbar">
-
-            <Link
-              className="back-home"
-              to="/"
-            >
-
-              <FaArrowLeft />
-
-              חזרה לבית
-
+            <Link className="back-home" to="/">
+              <FaArrowLeft aria-hidden="true" />
+              <span>חזרה לבית</span>
             </Link>
 
             <div className="wizard-progress">
-
-              <span>
-
-                שלב {step} מתוך {totalSteps}
-
-              </span>
-
-              <div className="progress-bar">
-
-                <div
-                  className="progress-fill"
-                  style={{
-                    width: `${progress}%`,
-                  }}
-                ></div>
-
+              <div className="wizard-progress__copy">
+                <span>שלב {step} מתוך {totalSteps}</span>
+                <strong>{Math.round(progress)}%</strong>
               </div>
+              <div
+                className="navbar-progress-track"
+                role="progressbar"
+                aria-label="התקדמות ביצירת הספר"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                aria-valuenow={Math.round(progress)}
+              >
+                <span style={{ width: `${progress}%` }} />
+              </div>
+            </div>
+          </div>
+        ) : (
+          <>
+            {!isSimpleNavbar ? (
+              <nav className="navbar-main-nav" aria-label="ניווט ראשי">
+                {primaryLinks.map((item) => renderNavLink(item))}
+              </nav>
+            ) : null}
 
+            {isSimpleNavbar ? (
+              <Link className="navbar-home-action" to="/">
+                <FaArrowLeft aria-hidden="true" />
+                <span>חזרה לדף הבית</span>
+              </Link>
+            ) : (
+              <div className="navbar-actions">
+                <div className="navbar-desktop-actions">
+                  {resolvedVariant === 'checkout' ? (
+                    <span className="navbar-secure-pill">
+                      <FaLock aria-hidden="true" />
+                      רכישה מאובטחת
+                    </span>
+                  ) : null}
+
+                  {user ? (
+                    <Link
+                      className="navbar-icon-action"
+                      to="/cart"
+                      aria-label={`עגלת הקניות, ${cartCount} פריטים`}
+                    >
+                      <FaShoppingCart aria-hidden="true" />
+                      <span>עגלה</span>
+                      {cartCount > 0 ? (
+                        <b className="navbar-cart-badge">{cartCount}</b>
+                      ) : null}
+                    </Link>
+                  ) : null}
+
+                  {user ? (
+                    <button className="navbar-account-action" type="button" onClick={logout}>
+                      <FaSignOutAlt aria-hidden="true" />
+                      <span>התנתקות</span>
+                      {user.name ? <small>{user.name}</small> : null}
+                    </button>
+                  ) : (
+                    <Link className="navbar-account-action" to="/login">
+                      <FaUserCircle aria-hidden="true" />
+                      <span>התחברות</span>
+                    </Link>
+                  )}
+
+                  {showCreateAction ? (
+                    <Link className="navbar-create-action" to="/create-book">
+                      <FaMagic aria-hidden="true" />
+                      <span>יצירת ספר אישי</span>
+                    </Link>
+                  ) : null}
+                </div>
+
+                {canOpenMenu ? (
+                  <button
+                    className="navbar-menu-toggle"
+                    type="button"
+                    onClick={() => setMobileOpen(true)}
+                    aria-label="פתיחת תפריט הניווט"
+                    aria-expanded={mobileOpen}
+                    aria-controls="mobile-navigation"
+                  >
+                    <FaBars aria-hidden="true" />
+                  </button>
+                ) : null}
+              </div>
+            )}
+          </>
+        )}
+      </div>
+
+      {canOpenMenu ? (
+        <>
+          <button
+            className={`navbar-overlay ${mobileOpen ? 'is-open' : ''}`}
+            type="button"
+            aria-label="סגירת תפריט הניווט"
+            tabIndex={mobileOpen ? 0 : -1}
+            onClick={closeMenu}
+          />
+
+          <aside
+            id="mobile-navigation"
+            className={`navbar-drawer ${mobileOpen ? 'is-open' : ''}`}
+            aria-hidden={!mobileOpen}
+            aria-modal="true"
+            role="dialog"
+          >
+            <div className="navbar-drawer__header">
+              <Link to="/" className="navbar-drawer__brand" onClick={closeMenu}>
+                <img src={Fox} alt="" aria-hidden="true" />
+                <span>
+                  <strong>Sipuri</strong>
+                  <small>הסיפור שלך מתחיל כאן</small>
+                </span>
+              </Link>
+              <button type="button" onClick={closeMenu} aria-label="סגירת התפריט">
+                <FaTimes aria-hidden="true" />
+              </button>
             </div>
 
-          </div>
+            <nav className="navbar-drawer__links" aria-label="ניווט למובייל">
+              {primaryLinks.map((item) => renderNavLink(item, true))}
+              {user ? (
+                <Link to="/cart" onClick={closeMenu} className={location.pathname === '/cart' ? 'is-active' : ''}>
+                  <FaShoppingCart aria-hidden="true" />
+                  <span>עגלת הקניות</span>
+                  {cartCount > 0 ? <b>{cartCount}</b> : null}
+                </Link>
+              ) : null}
+            </nav>
 
-        )}
+            <div className="navbar-drawer__footer">
+              {user ? (
+                <div className="navbar-drawer__user">
+                  <span>
+                    <FaUserCircle aria-hidden="true" />
+                    <span>
+                      <small>מחובר/ת בתור</small>
+                      <strong>{user.name || user.email || 'החשבון שלי'}</strong>
+                    </span>
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      logout();
+                      closeMenu();
+                    }}
+                  >
+                    <FaSignOutAlt aria-hidden="true" />
+                    התנתקות
+                  </button>
+                </div>
+              ) : (
+                <Link className="navbar-drawer__login" to="/login" onClick={closeMenu}>
+                  <FaUserCircle aria-hidden="true" />
+                  התחברות לחשבון
+                </Link>
+              )}
 
-      </div>
+              {showCreateAction ? (
+                <Link className="navbar-drawer__create" to="/create-book" onClick={closeMenu}>
+                  <FaMagic aria-hidden="true" />
+                  יצירת ספר אישי
+                </Link>
+              ) : null}
 
-      {mobileOpen && (
-
-        <div
-
-          className="mobile-overlay"
-
-          onClick={() => setMobileOpen(false)}
-
-        />
-
-      )}
-
-      <div
-
-        className={`mobile-menu ${mobileOpen ? "open" : ""}`}
-
-      >
-
-        <div className="mobile-header">
-
-          <h2>
-
-            Sipuri
-
-          </h2>
-
-          <button
-
-            onClick={() => setMobileOpen(false)}
-
-          >
-
-            <FaTimes />
-
-          </button>
-
-        </div>
-
-        <nav>
-
-          <Link to="/" onClick={() => setMobileOpen(false)}>
-            דף הבית
-          </Link>
-
-          <Link
-            to="/how-it-works"
-            onClick={() => setMobileOpen(false)}
-          >
-            איך זה עובד
-          </Link>
-
-          <Link
-            to="/#story"
-            onClick={scrollToHomeSection("story")}
-          >
-            הסיפור שלנו
-          </Link>
-
-          <Link
-            to="/#reviews"
-            onClick={scrollToHomeSection("reviews")}
-          >
-            ביקורות
-          </Link>
-
-          <Link
-            to="/library"
-            onClick={() => setMobileOpen(false)}
-          >
-            הספרייה שלי
-          </Link>
-
-          {user && (
-            <Link
-              to="/cart"
-              onClick={() => setMobileOpen(false)}
-            >
-              עגלת הקניות {cartCount > 0 ? `(${cartCount})` : ''}
-            </Link>
-          )}
-
-        </nav>
-
-        {user ? (
-          <button className="mobile-account-btn" onClick={() => { logout(); setMobileOpen(false); }}>
-            התנתקות {user.name ? `· ${user.name}` : ''}
-          </button>
-        ) : (
-          <Link className="mobile-account-btn" to="/login" onClick={() => setMobileOpen(false)}>
-            התחברות לחשבון
-          </Link>
-        )}
-
-        <Link
-
-          to="/create-book"
-
-          onClick={() => setMobileOpen(false)}
-
-        >
-
-          <button>
-
-            ✨ צור ספר אישי
-
-          </button>
-
-        </Link>
-
-      </div>
-
+              {resolvedVariant === 'checkout' ? (
+                <span className="navbar-drawer__secure">
+                  <FaLock aria-hidden="true" />
+                  התשלום מאובטח ומוגן
+                </span>
+              ) : null}
+            </div>
+          </aside>
+        </>
+      ) : null}
     </header>
-
   );
-
 }
 
 export default Navbar;

@@ -5,7 +5,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0;
+  padding: var(--navbar-height) 0 0;
   overflow: hidden;
   background: radial-gradient(
     circle at top,
@@ -13,6 +13,15 @@
     #fdfbff 46%,
     #ffffff 100%
   );
+}
+
+.book-viewer .book-scene,
+.book-viewer .book-shell,
+.book-viewer .book-view,
+.book-viewer .book-stage {
+  height: calc(100svh - var(--navbar-height));
+  min-height: 0;
+  max-height: calc(100svh - var(--navbar-height));
 }
 
 .viewer-loading {
@@ -24,4 +33,6 @@
   gap: 20px;
   font-size: 28px;
   color: #4b3a72;
+  padding: calc(var(--navbar-height) + 24px) 20px 24px;
+  text-align: center;
 }

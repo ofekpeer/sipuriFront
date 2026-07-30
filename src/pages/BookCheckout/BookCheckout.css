@@ -2,7 +2,7 @@
   min-height: 100vh;
   display: grid;
   place-items: center;
-  padding: 28px;
+  padding: calc(var(--navbar-height) + 32px) 28px 40px;
   background: radial-gradient(circle at top, #f4efff 0%, #fff 68%);
   color: #332650;
 }
@@ -83,7 +83,7 @@
 
 @media (max-width: 680px) {
   .checkout-page {
-    padding: 16px;
+    padding: calc(var(--navbar-height) + 20px) 16px 24px;
   }
 
   .checkout-card {

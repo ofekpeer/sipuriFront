@@ -3,6 +3,7 @@ import "./CreateBook.css";
 import { useEffect, useRef } from "react";
 
 import { useBook } from "../../context/BookContext";
+import { warmBookApi } from "../../services/bookApi";
 
 import ProgressBar from "../../components/bookWizard/ProgressBar";
 import StepOne from "../../components/bookWizard/StepOne";
@@ -15,6 +16,12 @@ function CreateBook() {
 
     const { step } = useBook();
     const formRef = useRef(null);
+
+    useEffect(() => {
+        // Render may put the API to sleep when it is idle. Wake it while the
+        // user fills in the wizard, so submitting the book is immediate.
+        warmBookApi().catch(() => {});
+    }, []);
 
     useEffect(() => {
         const frameId = window.requestAnimationFrame(() => {

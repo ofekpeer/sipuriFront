@@ -59,3 +59,7 @@ export function getLibraryRequest(token) {
     headers: { Authorization: `Bearer ${token}` },
   });
 }
+
+export function warmAuthApi() {
+  return request('/health');
+}

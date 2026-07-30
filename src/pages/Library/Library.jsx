@@ -5,15 +5,15 @@ import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 import { getLibraryRequest } from '../../services/authApi';
 import { deleteBookRequest, getBookAssetUrl } from '../../services/bookApi';
+import Navbar from '../../components/navbar/Navbar';
 import './Library.css';
 
 function Library() {
   const location = useLocation();
-  const { user, token, logout } = useAuth();
+  const { user, token } = useAuth();
   const {
     addBook,
     containsBook,
-    summary: cartSummary,
     updatingBookId,
   } = useCart();
   const [books, setBooks] = useState([]);
@@ -114,63 +114,57 @@ function Library() {
   }
 
   return (
-    <main className="library-page">
-      <header className="library-header">
-        <Link to="/" className="library-brand">סיפורי</Link>
-        <div className="library-account">
-          <Link to="/" className="library-home-link">חזרה לדף הבית</Link>
-          <Link to="/cart" className="library-home-link">
-            עגלה ({cartSummary.itemCount})
-          </Link>
-          <span>שלום, {user?.name || 'קורא/ת'}</span>
-          <button type="button" onClick={logout}>התנתקות</button>
-        </div>
-      </header>
+    <>
+      <Navbar variant="app" />
+      <main className="library-page">
 
-      <section className="library-hero">
-        <span>📚 הספרייה שלי</span>
-        <h1>כל הסיפורים שלך מחכים כאן</h1>
-        <p>הספרים שנרכשו או נוצרו עבורך זמינים כאן מכל מכשיר.</p>
-      </section>
-
-      {location.state?.bookQueued && (
-        <div className="library-queued-notice" role="status">
-          <span>✨</span>
-          <div>
-            <strong>יצירת הספר התחילה</strong>
-            <p>אפשר להמשיך להשתמש באתר. הספר יתעדכן כאן אוטומטית ברגע שיהיה מוכן.</p>
-          </div>
-        </div>
-      )}
-
-      {location.state?.bookRemoved && (
-        <div className="library-queued-notice is-removed" role="status">
-          <span>✓</span>
-          <div>
-            <strong>הספר הוסר מהספרייה</strong>
-          </div>
-        </div>
-      )}
-
-      {loading && <p className="library-status">טוען את הספרייה...</p>}
-      {error && <p className="library-status library-error">{error}</p>}
-
-      {!loading && !error && books.length === 0 && (
-        <section className="library-empty">
-          <div>✨</div>
-          <h2>הספרייה עדיין ריקה</h2>
-          <p>כשתיצרו או תרכשו ספר, הוא יופיע כאן ויהיה זמין לקריאה בכל עת.</p>
-          <Link to="/create-book">ליצירת הספר הראשון</Link>
+        <section className="library-hero">
+          <span>📚 הספרייה שלי</span>
+          <h1>כל הסיפורים שלך מחכים כאן</h1>
+          <p>
+            שלום {user?.name || 'קורא/ת'}, הספרים שנרכשו או נוצרו עבורך
+            זמינים כאן מכל מכשיר.
+          </p>
         </section>
-      )}
 
-      {!loading && !error && books.length > 0 && (
-        <section className="library-grid">
-          {books.map((book) => (
-            <article
-              className={`library-book ${book.status === 'generating' ? 'is-generating' : ''}`}
-              key={book._id}
-            >
+        {location.state?.bookQueued && (
+          <div className="library-queued-notice" role="status">
+            <span>✨</span>
+            <div>
+              <strong>יצירת הספר התחילה</strong>
+              <p>אפשר להמשיך להשתמש באתר. הספר יתעדכן כאן אוטומטית ברגע שיהיה מוכן.</p>
+            </div>
+          </div>
+        )}
+
+        {location.state?.bookRemoved && (
+          <div className="library-queued-notice is-removed" role="status">
+            <span>✓</span>
+            <div>
+              <strong>הספר הוסר מהספרייה</strong>
+            </div>
+          </div>
+        )}
+
+        {loading && <p className="library-status">טוען את הספרייה...</p>}
+        {error && <p className="library-status library-error">{error}</p>}
+
+        {!loading && !error && books.length === 0 && (
+          <section className="library-empty">
+            <div>✨</div>
+            <h2>הספרייה עדיין ריקה</h2>
+            <p>כשתיצרו או תרכשו ספר, הוא יופיע כאן ויהיה זמין לקריאה בכל עת.</p>
+            <Link to="/create-book">ליצירת הספר הראשון</Link>
+          </section>
+        )}
+
+        {!loading && !error && books.length > 0 && (
+          <section className="library-grid">
+            {books.map((book) => (
+              <article
+                className={`library-book ${book.status === 'generating' ? 'is-generating' : ''}`}
+                key={book._id}
+              >
               <div className="library-cover-wrap">
                 {book.cover?.imageUrl ? (
                   <img src={getBookAssetUrl(book.cover.imageUrl)} alt={book.title} />
@@ -265,11 +259,12 @@ function Library() {
                   {removingId === book._id ? 'מסיר...' : 'מחיקת הספר'}
                 </button>
               )}
-            </article>
-          ))}
-        </section>
-      )}
-    </main>
+              </article>
+            ))}
+          </section>
+        )}
+      </main>
+    </>
   );
 }
 

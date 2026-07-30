@@ -11,6 +11,13 @@ const storyNames = {
   pirates: 'פיראטים',
 };
 
+const storyIcons = {
+  space: '🚀',
+  dinosaurs: '🦕',
+  magic: '🪄',
+  pirates: '🏴‍☠️',
+};
+
 const styleNames = {
   disney: 'דיסני',
   pixar: 'פיקסאר',
@@ -35,10 +42,16 @@ function StepFive() {
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
 
+  const childName = formData.child.name.trim();
+  const storyName = storyNames[formData.story.type];
+  const storyIcon = storyIcons[formData.story.type] || '✨';
+  const styleName = styleNames[formData.design.illustrationStyle];
+  const avatarLetter = childName ? Array.from(childName)[0] : '✨';
+
   function validateBeforeSubmit() {
     const age = Number(formData.child.age);
     if (
-      !formData.child.name.trim()
+      !childName
       || !Number.isInteger(age)
       || age < 1
       || age > 12
@@ -94,78 +107,160 @@ function StepFive() {
   }
 
   return (
-    <>
-      <span className="wizard-step-kicker">שלב 5 · בדיקה אחרונה</span>
-      <h2>הכול מוכן ליצירת הקסם 🎉</h2>
-      <p className="step-description">
-        עברו על הפרטים. אחרי הלחיצה הספר יתחיל להיווצר ברקע ותוכלו להמשיך
-        להשתמש באתר.
-      </p>
-
-      <div className="review-grid">
-        <section className="review-card">
-          <div className="review-card__header">
-            <span>👋 פרטי הגיבור</span>
-            <button type="button" onClick={() => goToStep(1)}>עריכה</button>
+    <div className="final-step">
+      <section className="final-step__hero">
+        <div className="final-step__heading">
+          <span className="wizard-step-kicker">שלב 5 · בדיקה אחרונה</span>
+          <h2>
+            הסיפור של
+            {' '}
+            <span>{childName || 'הכוכב שלנו'}</span>
+            {' '}
+            מוכן לצאת לדרך
+          </h2>
+          <p>
+            עברו עוד פעם אחת על הבחירות. לאחר הלחיצה הספר יופיע בספרייה והקסם ימשיך להיווצר ברקע.
+          </p>
+          <div className="final-step__ready-badge">
+            <span aria-hidden="true">✓</span>
+            כל הפרטים הדרושים מוכנים
           </div>
-          <dl>
-            <div><dt>שם</dt><dd>{formData.child.name || '-'}</dd></div>
-            <div><dt>גיל</dt><dd>{formData.child.age || '-'}</dd></div>
-            <div><dt>לשון פנייה</dt><dd>{genderNames[formData.child.gender] || '-'}</dd></div>
-            <div><dt>תחביבים</dt><dd>{formData.story.hobbies || '-'}</dd></div>
-          </dl>
-        </section>
+        </div>
 
-        <section className="review-card">
-          <div className="review-card__header">
-            <span>🚀 ההרפתקה</span>
-            <button type="button" onClick={() => goToStep(2)}>עריכה</button>
+        <aside className="final-book-preview" aria-label="תצוגת סיכום הספר">
+          <span className="final-book-preview__shine" aria-hidden="true">✦</span>
+          <span className="final-book-preview__genre">{storyIcon} {storyName}</span>
+          <div className="final-book-preview__avatar">{avatarLetter}</div>
+          <strong>{childName}</strong>
+          <small>וההרפתקה הגדולה בעולם ה{storyName}</small>
+          <span className="final-book-preview__style">מאויר בסגנון {styleName}</span>
+        </aside>
+      </section>
+
+      <section className="final-step__review">
+        <div className="final-step__review-heading">
+          <div>
+            <span aria-hidden="true">🔎</span>
+            <div>
+              <h3>הכול נראה נכון?</h3>
+              <p>לחצו על עריכה ליד כל חלק שתרצו לשנות.</p>
+            </div>
           </div>
-          <strong>{storyNames[formData.story.type] || 'לא נבחרה הרפתקה'}</strong>
-        </section>
+          <span>4 מתוך 4 חלקים מוכנים</span>
+        </div>
 
-        <section className="review-card">
-          <div className="review-card__header">
-            <span>🎨 סגנון האיור</span>
-            <button type="button" onClick={() => goToStep(3)}>עריכה</button>
-          </div>
-          <strong>{styleNames[formData.design.illustrationStyle] || 'לא נבחר סגנון'}</strong>
-        </section>
+        <div className="review-grid review-grid--polished">
+          <section className="review-card review-card--hero">
+            <div className="review-card__header">
+              <span>👋 פרטי הגיבור</span>
+              <button type="button" onClick={() => goToStep(1)}>עריכה</button>
+            </div>
+            <div className="review-card__avatar-row">
+              <span>{avatarLetter}</span>
+              <div>
+                <strong>{childName}</strong>
+                <small>{genderNames[formData.child.gender]} · גיל {formData.child.age}</small>
+              </div>
+            </div>
+            <div className="review-card__hobbies">
+              <span>הדברים האהובים</span>
+              <strong>{formData.story.hobbies}</strong>
+            </div>
+          </section>
 
-        <section className="review-card">
-          <div className="review-card__header">
-            <span>📸 תמונת הייחוס</span>
-            <button type="button" onClick={() => goToStep(4)}>עריכה</button>
-          </div>
-          <strong>{formData.child.image ? `נבחרה: ${formData.child.image.name}` : 'ללא תמונה'}</strong>
-        </section>
-      </div>
+          <section className="review-card review-card--choice">
+            <div className="review-card__header">
+              <span>🚀 ההרפתקה</span>
+              <button type="button" onClick={() => goToStep(2)}>עריכה</button>
+            </div>
+            <div className="review-card__choice-value">
+              <span aria-hidden="true">{storyIcon}</span>
+              <div>
+                <strong>{storyName || 'לא נבחרה הרפתקה'}</strong>
+                <small>העולם שבו הסיפור יתרחש</small>
+              </div>
+            </div>
+          </section>
 
-      <div className="creation-expectation">
+          <section className="review-card review-card--choice">
+            <div className="review-card__header">
+              <span>🎨 סגנון האיור</span>
+              <button type="button" onClick={() => goToStep(3)}>עריכה</button>
+            </div>
+            <div className="review-card__choice-value">
+              <span aria-hidden="true">🖼️</span>
+              <div>
+                <strong>{styleName || 'לא נבחר סגנון'}</strong>
+                <small>המראה שיוביל את כל עמודי הספר</small>
+              </div>
+            </div>
+          </section>
+
+          <section className="review-card review-card--photo">
+            <div className="review-card__header">
+              <span>📸 תמונת הייחוס</span>
+              <button type="button" onClick={() => goToStep(4)}>עריכה</button>
+            </div>
+            <div className="review-card__photo-value">
+              <span aria-hidden="true">{formData.child.image ? '✓' : '○'}</span>
+              <div>
+                <strong>{formData.child.image ? 'התמונה מוכנה' : 'ללא תמונה'}</strong>
+                <small>
+                  {formData.child.image
+                    ? formData.child.image.name
+                    : 'הדמות תיווצר לפי הפרטים שמילאתם'}
+                </small>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <div className="creation-expectation creation-expectation--polished">
         <span aria-hidden="true">✨</span>
         <div>
           <strong>אין צורך להישאר במסך המתנה</strong>
           <p>הספר יופיע מיד בספרייה ויתעדכן שם אוטומטית בזמן שהסיפור והאיורים נוצרים.</p>
         </div>
+        <span className="creation-expectation__steps">סיפור ← כריכה ← עמודים</span>
       </div>
 
       {submitError ? <p className="book-submit-error" role="alert">{submitError}</p> : null}
 
-      <div className="wizard-buttons">
+      <div className="wizard-step-footer final-step__actions">
         <button type="button" className="back-btn" onClick={prevStep} disabled={submitting}>
-          ← הקודם
+          <span aria-hidden="true">→</span>
+          הקודם
         </button>
 
-        <button type="button" className="next-btn create-book-btn" onClick={createBook} disabled={submitting}>
+        <div className="wizard-step-footer__status">
+          <span aria-hidden="true">5</span>
+          <div>
+            <strong>השלב האחרון</strong>
+            <small>מכאן הספר עובר לספרייה שלכם</small>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          className="next-btn create-book-btn"
+          onClick={createBook}
+          disabled={submitting}
+        >
           {submitting ? (
             <>
               <span className="button-spinner" aria-hidden="true" />
               שומרים ומתחילים...
             </>
-          ) : '✨ התחילו ליצור את הספר'}
+          ) : (
+            <>
+              <span aria-hidden="true">✨</span>
+              התחילו ליצור את הספר
+            </>
+          )}
         </button>
       </div>
-    </>
+    </div>
   );
 }
 

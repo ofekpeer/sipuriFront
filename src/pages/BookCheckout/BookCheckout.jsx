@@ -7,6 +7,7 @@ import {
   getBookRequest,
   getPaymentConfigurationRequest,
 } from '../../services/bookApi';
+import Navbar from '../../components/navbar/Navbar';
 import './BookCheckout.css';
 
 function BookCheckout() {
@@ -56,33 +57,35 @@ function BookCheckout() {
   }
 
   if (loading) {
-    return <main className="checkout-page">טוען את פרטי ההזמנה...</main>;
+    return (
+      <>
+        <Navbar variant="checkout" />
+        <main className="checkout-page">טוען את פרטי ההזמנה...</main>
+      </>
+    );
   }
 
   if (!book) {
     return (
-      <main className="checkout-page">
-        <p>לא הצלחנו למצוא את הספר.</p>
-        <Link to="/">חזרה לדף הבית</Link>
-      </main>
+      <>
+        <Navbar variant="checkout" />
+        <main className="checkout-page">
+          <p>לא הצלחנו למצוא את הספר.</p>
+          <Link to="/">חזרה לדף הבית</Link>
+        </main>
+      </>
     );
   }
 
   return (
-    <main className="checkout-page">
-      <div className="checkout-glow checkout-glow-one" />
-      <div className="checkout-glow checkout-glow-two" />
+    <>
+      <Navbar variant="checkout" />
+      <main className="checkout-page">
+        <div className="checkout-glow checkout-glow-one" />
+        <div className="checkout-glow checkout-glow-two" />
 
-      <section className="checkout-shell">
-        <header className="checkout-header">
-          <Link className="checkout-brand" to="/" aria-label="חזרה לדף הבית">
-            <span className="checkout-brand-mark">ס</span>
-            סיפורי
-          </Link>
-          <span className="checkout-secure">🔒 רכישה מאובטחת</span>
-        </header>
-
-        <div className="checkout-card">
+        <section className="checkout-shell">
+          <div className="checkout-card">
           <section className="checkout-story-preview">
             <span className="checkout-spark sparkle-one">✦</span>
             <span className="checkout-spark sparkle-two">✦</span>
@@ -131,9 +134,10 @@ function BookCheckout() {
               ← חזרה לתצוגה המקדימה
             </Link>
           </section>
-        </div>
-      </section>
-    </main>
+          </div>
+        </section>
+      </main>
+    </>
   );
 }
 

@@ -69,6 +69,21 @@ function Library() {
     }
   };
 
+  const getGenerationProgress = (book) => {
+    switch (book.generationStep) {
+      case 'created':
+        return 8;
+      case 'analyzing-image':
+        return 24;
+      case 'generating-story':
+        return 38;
+      case 'generating-preview':
+        return 55 + Math.min(Number(book.generatedPages) || 0, 2) * 15;
+      default:
+        return 12;
+    }
+  };
+
   async function removeBook(book) {
     const message = book.isOwner
       ? 'למחוק את הספר לצמיתות? לא ניתן לבטל את הפעולה.'
@@ -174,8 +189,21 @@ function Library() {
 
               {book.status === 'generating' ? (
                 <div className="library-generation-status">
-                  <span className="library-status-dot" />
-                  {getGenerationLabel(book)}
+                  <div className="library-generation-copy">
+                    <span className="library-status-dot" />
+                    <span>{getGenerationLabel(book)}</span>
+                    <strong>{getGenerationProgress(book)}%</strong>
+                  </div>
+                  <div
+                    className="library-generation-progress"
+                    role="progressbar"
+                    aria-label="התקדמות יצירת הספר"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                    aria-valuenow={getGenerationProgress(book)}
+                  >
+                    <span style={{ width: `${getGenerationProgress(book)}%` }} />
+                  </div>
                 </div>
               ) : book.status === 'failed' ? (
                 <div className="library-generation-status is-failed">

@@ -271,7 +271,8 @@
 
   font-weight: 700;
 
-  background: linear-gradient(135deg, #6d4cff, #8f73ff);
+  color: #2f2650;
+  background: var(--art-gradient);
 
   box-shadow: 0 18px 40px rgba(109, 76, 255, 0.28);
 
@@ -691,7 +692,8 @@
 
   border-radius: 18px;
 
-  background: linear-gradient(135deg, #6d4cff, #8f73ff);
+  color: #2f2650;
+  background: var(--art-gradient);
 
   color: white;
 

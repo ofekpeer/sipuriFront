@@ -8,6 +8,11 @@
 
     --primary:#6D4CFF;
     --secondary:#8F73FF;
+    --art-lilac:#BDA8FF;
+    --art-sky:#7ED8FF;
+    --art-ink:#4D3D82;
+    --art-gradient:linear-gradient(135deg, var(--art-lilac), var(--art-sky));
+    --art-wash:linear-gradient(135deg, rgba(189,168,255,.2), rgba(126,216,255,.2));
 
     --background:#FAFAFF;
 

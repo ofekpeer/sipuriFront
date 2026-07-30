@@ -1,5 +1,7 @@
 import "./CreateBook.css";
 
+import { useEffect, useRef } from "react";
+
 import { useBook } from "../../context/BookContext";
 
 import ProgressBar from "../../components/bookWizard/ProgressBar";
@@ -9,11 +11,21 @@ import StepThree from "../../components/bookWizard/StepThree";
 import StepFour from "../../components/bookWizard/StepFour";
 import StepFive from "../../components/bookWizard/StepFive";
 
-import BookPreview from "../../components/bookPreview/BookPreview";
-
 function CreateBook() {
 
     const { step } = useBook();
+    const formRef = useRef(null);
+
+    useEffect(() => {
+        const frameId = window.requestAnimationFrame(() => {
+            formRef.current?.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+            });
+        });
+
+        return () => window.cancelAnimationFrame(frameId);
+    }, [step]);
 
     return (
 
@@ -21,7 +33,7 @@ function CreateBook() {
 
             <div className="create-wrapper">
 
-                <div className="create-form">
+                <div className="create-form" ref={formRef}>
 
                     <ProgressBar step={step} />
 
@@ -36,9 +48,6 @@ function CreateBook() {
                     {step === 5 && <StepFive />}
 
                 </div>
-
-                <BookPreview />
-
             </div>
 
         </div>

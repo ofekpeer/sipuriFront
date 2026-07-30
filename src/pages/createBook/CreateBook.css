@@ -9,15 +9,13 @@
 
 .create-wrapper {
 
-    max-width: 1400px;
+    max-width: 920px;
 
     margin: 0 auto;
 
     display: grid;
 
-    grid-template-columns: 1fr 380px;
-
-    gap: 40px;
+    grid-template-columns: minmax(0, 1fr);
 
     align-items: start;
 
@@ -26,6 +24,8 @@
 .create-form {
 
     background: white;
+
+    scroll-margin-top: 112px;
 
     border-radius: 28px;
 

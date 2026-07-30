@@ -28,7 +28,10 @@
 }
 
 .testimonials-header h2 em {
-  color: #7654ed;
+  background: var(--art-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
   font-style: normal;
 }
 
@@ -64,7 +67,7 @@
 .reviews-carousel .swiper-pagination-bullet-active {
   width: 23px;
   border-radius: 999px;
-  background: #7250eb;
+  background: var(--art-lilac);
 }
 
 .reviews-controls {
@@ -92,8 +95,8 @@
 }
 
 .reviews-controls button:hover {
-  color: white;
-  background: #7250eb;
+  color: #2f2650;
+  background: var(--art-gradient);
   transform: translateY(-2px);
 }
 

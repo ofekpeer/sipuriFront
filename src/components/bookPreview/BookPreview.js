@@ -43,13 +43,22 @@ function BookPreview() {
 
   };
 
+  const styleNames = {
+    disney: "אגדה",
+    pixar: "תלת־ממד",
+    watercolor: "צבעי מים",
+    comic: "קומיקס",
+  };
+
+  const selectedStyle = formData.design.illustrationStyle || "pixar";
+
   return (
 
     <div className="preview">
 
       <div className="preview-book">
 
-        <div className="preview-cover">
+        <div className={`preview-cover preview-cover--${selectedStyle}`}>
 
           <div className="preview-bookmark"></div>
 
@@ -110,6 +119,10 @@ function BookPreview() {
             }
 
           </span>
+
+          <small className="preview-style-label">
+            {styleNames[selectedStyle]} · תצוגה להמחשה
+          </small>
 
         </div>
 

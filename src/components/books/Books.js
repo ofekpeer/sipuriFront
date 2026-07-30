@@ -1,5 +1,7 @@
 import './Books.css';
 
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow, Pagination } from 'swiper/modules';
 import useMediaQuery from '../../hooks/useMediaQuery';
@@ -11,132 +13,164 @@ import 'swiper/css/pagination';
 import book1 from '../../assets/books/book1.jpg';
 import book2 from '../../assets/books/book2.jpg';
 import book3 from '../../assets/books/book3.jpg';
+import pirates from '../../assets/adventures/pirates.jpg';
+import magic from '../../assets/adventures/magic.jpg';
+import jungle from '../../assets/adventures/jungle.jpg';
 
 const books = [
   {
     image: book1,
-
     title: 'המסע של נועם',
-
     description: 'הרפתקה בעולם הדינוזאורים',
+    label: 'עולם קדום',
+    icon: '🦕',
   },
-
   {
     image: book2,
-
-    title: 'מאיה והחד קרן',
-
-    description: 'מסע קסום בארץ הפלאות',
-  },
-
-  {
-    image: book3,
-
-    title: 'יואב בחלל',
-
-    description: 'מסע בין הכוכבים',
+    title: 'מאיה והחד־קרן',
+    description: 'מסע קסום בארץ הקשת בענן',
+    label: 'הבחירה הקסומה',
+    icon: '🦄',
   },
   {
     image: book3,
-
     title: 'יואב בחלל',
-
     description: 'מסע בין הכוכבים',
+    label: 'מעבר לכוכבים',
+    icon: '🚀',
   },
+];
+
+const desktopBooks = [
+  books[0],
   {
-    image: book3,
-
-    title: 'יואב בחלל',
-
-    description: 'מסע בין הכוכבים',
+    image: pirates,
+    title: 'אורי ואוצר הפיראטים',
+    description: 'מפת אוצר והרפתקה בלב הים',
+    label: 'אוצר מעבר לים',
+    icon: '🏴‍☠️',
   },
+  books[1],
   {
-    image: book2,
-
-    title: 'מאיה והחד קרן',
-
-    description: 'מסע קסום בארץ הפלאות',
+    image: magic,
+    title: 'אלה ומפתח הקסמים',
+    description: 'דלת סודית לעולם מלא פלאים',
+    label: 'קסם בכל עמוד',
+    icon: '🪄',
   },
+  books[2],
   {
-    image: book2,
-
-    title: 'מאיה והחד קרן',
-
-    description: 'מסע קסום בארץ הפלאות',
-  },
-  {
-    image: book2,
-
-    title: 'מאיה והחד קרן',
-
-    description: 'מסע קסום בארץ הפלאות',
-  },
-  {
-    image: book2,
-
-    title: 'מאיה והחד קרן',
-
-    description: 'מסע קסום בארץ הפלאות',
+    image: jungle,
+    title: 'ליה בלב הג׳ונגל',
+    description: 'חברות אמיצה בין חיות מופלאות',
+    label: 'מסע בטבע',
+    icon: '🌿',
   },
 ];
 
 function Books() {
   const isMobile = useMediaQuery('(max-width: 768px)');
+  const [swiper, setSwiper] = useState(null);
+  const displayedBooks = desktopBooks;
+  const initialSlide = 2;
 
   return (
-    <section className="books">
-      <span className="books-badge">📚 ספרים שנוצרו</span>
+    <section className="books" aria-labelledby="books-title">
+      <div className="books__aurora books__aurora--one" aria-hidden="true" />
+      <div className="books__aurora books__aurora--two" aria-hidden="true" />
 
-      <h2>
-        כל ספר הוא
-        <span> יצירת אמנות</span>
-      </h2>
+      <div className="books__header">
+        <span className="books-badge">📚 הצצה למדף הקסום שלנו</span>
 
-      <p>הצצה לכמה מהספרים שנוצרו בסיפורי</p>
+        <h2 id="books-title">
+          כל ספר הוא
+          <span> יצירת אמנות</span>
+        </h2>
 
-      <Swiper
-        effect={isMobile ? 'slide' : 'coverflow'}
-        grabCursor={true}
-        centeredSlides={true}
-        slidesPerView={'auto'}
-        centerInsufficientSlides={true}
-        loop={!isMobile}
-        pagination={{
-          clickable: true,
-        }}
-        
-        coverflowEffect={{
-          rotate: 13,
+        <p>
+          סיפור שנכתב במיוחד לילד שלכם, עם עולם מאויר שבו הוא הגיבור הראשי.
+        </p>
+      </div>
 
-          stretch: 0,
+      <div className="books__gallery">
+        <button
+          type="button"
+          className="books-nav books-prev"
+          aria-label="הספר הקודם"
+          onClick={() => swiper?.slideNext()}
+        >
+          <span aria-hidden="true">→</span>
+        </button>
 
-          depth: 150,
+        <Swiper
+          key={isMobile ? 'books-mobile' : 'books-desktop'}
+          effect={isMobile ? 'slide' : 'coverflow'}
+          grabCursor
+          centeredSlides
+          initialSlide={initialSlide}
+          slidesPerView={isMobile ? 'auto' : 3}
+          spaceBetween={isMobile ? 16 : 26}
+          centerInsufficientSlides
+          watchSlidesProgress
+          loop
+          pagination={{ el: '.books-pagination', clickable: true }}
+          onSwiper={setSwiper}
+          coverflowEffect={{
+            rotate: 3,
+            stretch: 0,
+            depth: 115,
+            modifier: .9,
+            slideShadows: false,
+            scale: .9,
+          }}
+          modules={[EffectCoverflow, Pagination]}
+          className="books-slider"
+        >
+          {displayedBooks.map((book) => (
+            <SwiperSlide key={book.title} className="book-slide">
+              <article className="book-card">
+                <div className="book-card__visual">
+                  <img src={book.image} alt={`כריכת הספר ${book.title}`} loading="lazy" decoding="async" />
+                  <span className="book-card__spine" aria-hidden="true" />
+                  <span className="book-card__shine" aria-hidden="true" />
+                  <span className="book-card__label">{book.icon} {book.label}</span>
+                </div>
 
-          modifier: 0.5,
+                <div className="book-info">
+                  <div>
+                    <h3>{book.title}</h3>
+                    <p>{book.description}</p>
+                  </div>
+                  <span className="book-info__personal">נוצר במיוחד עבור ילד אחד</span>
+                </div>
+              </article>
+            </SwiperSlide>
+          ))}
+        </Swiper>
 
-          slideShadows: false,
+        <div className="books-pagination swiper-pagination" aria-label="ניווט בין הספרים" />
 
-          scale: 0.82,
-        }}
-        modules={[EffectCoverflow, Pagination]}
-        className="books-slider"
-      >
-        {books.map((book, index) => (
-          <SwiperSlide key={index} className="book-slide">
-            <div className="book-card">
-              <img src={book.image} alt={book.title} loading="lazy" decoding="async" />
+        <button
+          type="button"
+          className="books-nav books-next"
+          aria-label="הספר הבא"
+          onClick={() => swiper?.slidePrev()}
+        >
+          <span aria-hidden="true">←</span>
+        </button>
+      </div>
 
-              <div className="book-info">
-                <h3>{book.title}</h3>
+      <div className="books__footer">
+        <div className="books__promise">
+          <span>✦</span>
+          <p><strong>אף ספר לא דומה לאחר</strong> השם, העלילה והאיורים נוצרים במיוחד עבורכם.</p>
+        </div>
 
-                <p>{book.description}</p>
-
-                <button>דפדף בספר</button>
-              </div>
-            </div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
+        <Link className="books__cta" to="/create-book">
+          צרו את הספר שלכם
+          <span aria-hidden="true">←</span>
+        </Link>
+      </div>
     </section>
   );
 }

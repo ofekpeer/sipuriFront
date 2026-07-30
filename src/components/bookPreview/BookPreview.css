@@ -70,6 +70,27 @@
 
 }
 
+.preview-cover--disney {
+    background:linear-gradient(145deg,#3156d8,#7654e8 56%,#f0a44f);
+}
+
+.preview-cover--pixar {
+    background:linear-gradient(145deg,#5B34F4,#7C3AED,#A855F7);
+}
+
+.preview-cover--watercolor {
+    background:
+        radial-gradient(circle at 20% 18%,rgba(255,255,255,.48),transparent 25%),
+        linear-gradient(145deg,#67b9bc,#9c8bd9 52%,#efa7b7);
+}
+
+.preview-cover--comic {
+    background:
+        radial-gradient(rgba(255,255,255,.14) 1px,transparent 1px),
+        linear-gradient(145deg,#2449a4,#7139be 55%,#e34e65);
+    background-size:10px 10px,auto;
+}
+
 /* ברק */
 
 .preview-cover::before{
@@ -199,6 +220,15 @@
 
     z-index:2;
 
+}
+
+.preview-style-label {
+    position:absolute;
+    bottom:12px;
+    z-index:2;
+    color:rgba(255,255,255,.78);
+    font-size:11px;
+    font-weight:700;
 }
 
 /* נצנצים */

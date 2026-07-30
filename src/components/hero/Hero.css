@@ -61,7 +61,10 @@
 }
 
 .hero h1 em {
-  color: #7654ed;
+  background: var(--art-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
   font-style: normal;
 }
 
@@ -76,8 +79,8 @@
 .hero-buttons { display: flex; flex-wrap: wrap; gap: 13px; margin-top: 31px; }
 .primary-btn,
 .secondary-btn { display: inline-flex; align-items: center; justify-content: center; border-radius: 16px; font-weight: 800; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s, background 0.2s; }
-.primary-btn { gap: 9px; padding: 16px 22px; color: #fff; background: linear-gradient(135deg, #6c4bfa, #9d73ff); box-shadow: 0 16px 31px rgba(103, 74, 228, 0.28); }
-.primary-btn:hover { transform: translateY(-3px); box-shadow: 0 22px 37px rgba(103, 74, 228, 0.36); }
+.primary-btn { gap: 9px; padding: 16px 22px; color: #2f2650; background: var(--art-gradient); box-shadow: 0 16px 31px rgba(126, 216, 255, 0.25); }
+.primary-btn:hover { transform: translateY(-3px); box-shadow: 0 22px 37px rgba(126, 216, 255, 0.34); }
 .secondary-btn { padding: 15px 19px; border: 1px solid rgba(91, 68, 164, 0.14); color: #5d4a9b; background: rgba(255, 255, 255, 0.7); }
 .secondary-btn:hover { transform: translateY(-2px); background: #fff; box-shadow: 0 11px 25px rgba(64, 46, 117, 0.1); }
 

@@ -3,6 +3,7 @@ import "./BookWizard.css";
 function ProgressBar({ step }) {
 
   const progress = (step / 5) * 100;
+  const stepNames = ['פרטים', 'הרפתקה', 'איור', 'תמונה', 'בדיקה'];
 
   return (
     <>
@@ -52,7 +53,7 @@ function ProgressBar({ step }) {
         <div className="mobile-progress-top">
 
           <span>
-            שלב {step} מתוך 5
+            שלב {step} מתוך 5 · {stepNames[step - 1]}
           </span>
 
           <span>

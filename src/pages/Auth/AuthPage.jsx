@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { useAuth } from '../../context/AuthContext';
-import { warmAuthApi } from '../../services/authApi';
+import { getGoogleLoginUrl, warmAuthApi } from '../../services/authApi';
 import Navbar from '../../components/navbar/Navbar';
 import './AuthPage.css';
 
@@ -14,11 +14,28 @@ function AuthPage({ mode }) {
   const [form, setForm] = useState({ name: '', email: '', password: '' });
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [googleSubmitting, setGoogleSubmitting] = useState(false);
+  const [serverState, setServerState] = useState('checking');
 
   useEffect(() => {
-    warmAuthApi().catch(() => {
-      // The login request will show a useful error if the API remains unavailable.
-    });
+    let active = true;
+    const wakingTimer = window.setTimeout(() => {
+      if (active) setServerState('waking');
+    }, 1_200);
+
+    warmAuthApi()
+      .then(() => {
+        if (active) setServerState('ready');
+      })
+      .catch(() => {
+        if (active) setServerState('idle');
+      })
+      .finally(() => window.clearTimeout(wakingTimer));
+
+    return () => {
+      active = false;
+      window.clearTimeout(wakingTimer);
+    };
   }, []);
 
   useEffect(() => {
@@ -44,6 +61,10 @@ function AuthPage({ mode }) {
     setSubmitting(true);
 
     try {
+      setServerState('waking');
+      await warmAuthApi();
+      setServerState('ready');
+
       if (isRegister) {
         await register(form.name, form.email, form.password);
       } else {
@@ -55,6 +76,22 @@ function AuthPage({ mode }) {
       setError(requestError.message || 'לא הצלחנו להשלים את הפעולה');
     } finally {
       setSubmitting(false);
+    }
+  }
+
+  async function startGoogleLogin() {
+    setError('');
+    setGoogleSubmitting(true);
+    setServerState('waking');
+
+    try {
+      await warmAuthApi();
+      setServerState('ready');
+      window.location.assign(getGoogleLoginUrl());
+    } catch (requestError) {
+      setError(requestError.message || 'לא הצלחנו להכין את ההתחברות עם Google');
+      setServerState('idle');
+      setGoogleSubmitting(false);
     }
   }
 
@@ -84,15 +121,30 @@ function AuthPage({ mode }) {
           </label>
 
           {error && <p className="auth-error">{error}</p>}
-          <button type="submit" disabled={submitting}>
-            {submitting ? 'רק רגע...' : isRegister ? 'יצירת חשבון' : 'התחברות'}
+          <button type="submit" disabled={submitting || googleSubmitting}>
+            {submitting
+              ? serverState === 'waking' ? 'מעירים את השרת...' : 'רק רגע...'
+              : isRegister ? 'יצירת חשבון' : 'התחברות'}
           </button>
         </form>
 
         <div className="auth-divider"><span>או</span></div>
-        <button type="button" className="google-login" onClick={() => window.location.assign(`${process.env.REACT_APP_API_URL || 'https://sipuriback.onrender.com'}/api/auth/google`)}>
-          <span>G</span> המשך עם Google
+        <button
+          type="button"
+          className="google-login"
+          onClick={startGoogleLogin}
+          disabled={submitting || googleSubmitting}
+        >
+          <span className="google-login__icon">G</span>
+          <span>{googleSubmitting ? 'מכינים התחברות עם Google...' : 'המשך עם Google'}</span>
         </button>
+
+        {serverState === 'waking' && (
+          <p className="auth-server-status" role="status">
+            <span className="auth-server-spinner" aria-hidden="true" />
+            השרת מתעורר לאחר זמן ללא שימוש. זה עשוי לקחת עד כדקה, אין צורך לצאת מהעמוד.
+          </p>
+        )}
 
         <p className="auth-switch">
           {isRegister ? 'כבר יש לכם חשבון?' : 'עדיין אין לכם חשבון?'}{' '}

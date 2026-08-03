@@ -26,7 +26,7 @@ function OurStory() {
               התחביבים שלהם והעולם שהם הכי אוהבים לדמיין.
             </p>
             <p>
-              כך נולד Sipuri — מקום שבו כל ספר הוא הרפתקה אישית, מאוירת ומלאה
+              כך נולד סיפורי — מקום שבו כל ספר הוא הרפתקה אישית, מאוירת ומלאה
               בקסם, שנוצרה במיוחד בשביל ילד או ילדה אחת.
             </p>
 
@@ -46,7 +46,7 @@ function OurStory() {
 
           <div className="story-visual">
             <div className="story-image">
-              <img src={storyImage} alt="ילד קורא סיפור אישי של Sipuri" loading="lazy" decoding="async" />
+              <img src={storyImage} alt="ילד קורא סיפור אישי של סיפורי" loading="lazy" decoding="async" />
             </div>
             <div className="story-visual__tag">✦ נכתב במיוחד בשבילם</div>
             <div className="story-visual__spark story-visual__spark--one">✦</div>

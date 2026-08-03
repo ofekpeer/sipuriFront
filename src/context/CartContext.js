@@ -12,20 +12,55 @@ import {
   clearCartRequest,
   getCartRequest,
   removeBookFromCartRequest,
+  updateBookInCartRequest,
 } from '../services/cartApi';
 import { useAuth } from './AuthContext';
 
 const CartContext = createContext(null);
 const EMPTY_CART = {
   items: [],
+  products: [
+    {
+      id: 'digital',
+      label: 'ספר דיגיטלי',
+      shortLabel: 'דיגיטלי',
+      amountAgorot: 4_900,
+      includesPhysicalBook: false,
+    },
+    {
+      id: 'digital_physical',
+      label: 'ספר דיגיטלי + ספר פיזי',
+      shortLabel: 'דיגיטלי + פיזי',
+      amountAgorot: 12_900,
+      includesPhysicalBook: true,
+    },
+  ],
   summary: {
     itemCount: 0,
     subtotalAgorot: 0,
     currency: 'ILS',
     pricingConfigured: false,
     checkoutConfigured: false,
+    hasPhysicalItems: false,
   },
 };
+
+function normalizeCart(nextCart) {
+  if (!nextCart) return EMPTY_CART;
+
+  return {
+    ...EMPTY_CART,
+    ...nextCart,
+    items: Array.isArray(nextCart.items) ? nextCart.items : [],
+    products: Array.isArray(nextCart.products) && nextCart.products.length
+      ? nextCart.products
+      : EMPTY_CART.products,
+    summary: {
+      ...EMPTY_CART.summary,
+      ...(nextCart.summary || {}),
+    },
+  };
+}
 
 export function CartProvider({ children }) {
   const { user, token, loading: authLoading } = useAuth();
@@ -45,9 +80,10 @@ export function CartProvider({ children }) {
 
     try {
       const response = await getCartRequest();
-      setCart(response.data || EMPTY_CART);
+      const normalizedCart = normalizeCart(response.data);
+      setCart(normalizedCart);
       setError('');
-      return response.data;
+      return normalizedCart;
     } catch (requestError) {
       if (!silent) setError(requestError.message || 'לא הצלחנו לטעון את העגלה.');
       throw requestError;
@@ -71,7 +107,7 @@ export function CartProvider({ children }) {
     getCartRequest()
       .then((response) => {
         if (!active) return;
-        setCart(response.data || EMPTY_CART);
+        setCart(normalizeCart(response.data));
         setError('');
       })
       .catch((requestError) => {
@@ -87,12 +123,12 @@ export function CartProvider({ children }) {
     };
   }, [authLoading, token, user]);
 
-  const addBook = useCallback(async (bookId) => {
-    setUpdatingBookId(bookId);
+  const addBook = useCallback(async (bookId, productType = 'digital') => {
+    setUpdatingBookId(String(bookId));
     setError('');
     try {
-      const response = await addBookToCartRequest(bookId);
-      setCart(response.data || EMPTY_CART);
+      const response = await addBookToCartRequest(bookId, productType);
+      setCart(normalizeCart(response.data));
       return response.data;
     } catch (requestError) {
       setError(requestError.message || 'לא הצלחנו להוסיף את הספר לעגלה.');
@@ -102,12 +138,27 @@ export function CartProvider({ children }) {
     }
   }, []);
 
+  const updateBookProduct = useCallback(async (bookId, productType) => {
+    setUpdatingBookId(String(bookId));
+    setError('');
+    try {
+      const response = await updateBookInCartRequest(bookId, productType);
+      setCart(normalizeCart(response.data));
+      return response.data;
+    } catch (requestError) {
+      setError(requestError.message || 'לא הצלחנו לעדכן את חבילת הספר בעגלה.');
+      throw requestError;
+    } finally {
+      setUpdatingBookId('');
+    }
+  }, []);
+
   const removeBook = useCallback(async (bookId) => {
-    setUpdatingBookId(bookId);
+    setUpdatingBookId(String(bookId));
     setError('');
     try {
       const response = await removeBookFromCartRequest(bookId);
-      setCart(response.data || EMPTY_CART);
+      setCart(normalizeCart(response.data));
       return response.data;
     } catch (requestError) {
       setError(requestError.message || 'לא הצלחנו להסיר את הספר מהעגלה.');
@@ -122,7 +173,7 @@ export function CartProvider({ children }) {
     setError('');
     try {
       const response = await clearCartRequest();
-      setCart(response.data || EMPTY_CART);
+      setCart(normalizeCart(response.data));
     } catch (requestError) {
       setError(requestError.message || 'לא הצלחנו לרוקן את העגלה.');
       throw requestError;
@@ -142,6 +193,7 @@ export function CartProvider({ children }) {
     error,
     updatingBookId,
     addBook,
+    updateBookProduct,
     removeBook,
     emptyCart,
     refreshCart,
@@ -156,6 +208,7 @@ export function CartProvider({ children }) {
     refreshCart,
     removeBook,
     updatingBookId,
+    updateBookProduct,
   ]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

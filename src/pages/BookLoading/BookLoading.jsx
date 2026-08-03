@@ -1,9 +1,62 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { createBookRequest, getBookRequest } from '../../services/bookApi';
+import {
+  createBookRequest,
+  getBookAssetUrl,
+  getBookRequest,
+} from '../../services/bookApi';
 import Navbar from '../../components/navbar/Navbar';
+import {
+  getBookPreviewImageUrls,
+  hasRenderableBookPreview,
+} from '../bookViewer/bookViewerState';
 import './BookLoading.css';
+
+const POLL_INTERVAL_MS = 1200;
+const IMAGE_PRELOAD_TIMEOUT_MS = 15000;
+
+function preloadImage(url) {
+  if (!url || typeof Image === 'undefined') return Promise.resolve(false);
+
+  return new Promise((resolve) => {
+    const image = new Image();
+    let settled = false;
+
+    function finish(result) {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timeout);
+      image.onload = null;
+      image.onerror = null;
+      resolve(result);
+    }
+
+    const timeout = setTimeout(
+      () => finish(false),
+      IMAGE_PRELOAD_TIMEOUT_MS,
+    );
+
+    image.onload = async () => {
+      try {
+        if (typeof image.decode === 'function') await image.decode();
+      } catch {
+        // A successful load is sufficient on browsers that reject decode()
+        // after taking the image from their memory cache.
+      }
+
+      finish(true);
+    };
+    image.onerror = () => finish(false);
+    image.src = getBookAssetUrl(url);
+  });
+}
+
+async function preloadBookPreview(book) {
+  const urls = getBookPreviewImageUrls(book);
+  const results = await Promise.all(urls.map(preloadImage));
+  return results.length === 3 && results.every(Boolean);
+}
 
 function BookLoading() {
   const location = useLocation();
@@ -11,15 +64,19 @@ function BookLoading() {
 
   const [step, setStep] = useState('מכין את הספר שלך...');
   const [progress, setProgress] = useState(0);
-  const intervalRef = useRef(null);
+  const pollTimeoutRef = useRef(null);
+  const stoppedRef = useRef(false);
+  const mountedRef = useRef(false);
+  const creationStartedRef = useRef(false);
 
   const waitUntilCompleted = useCallback(
     (id) => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
+      if (pollTimeoutRef.current) clearTimeout(pollTimeoutRef.current);
+      stoppedRef.current = false;
 
-      intervalRef.current = setInterval(async () => {
+      async function poll() {
+        let shouldPollAgain = true;
+
         try {
           const data = await getBookRequest(id);
           const book = data.data;
@@ -59,14 +116,33 @@ function BookLoading() {
             }
 
             case 'completed':
-              setProgress(100);
-              setStep('✅ הספר מוכן!');
-              clearInterval(intervalRef.current);
-              setTimeout(() => navigate(`/book/${id}`), 500);
+              if (!hasRenderableBookPreview(book)) {
+                setProgress(96);
+                setStep('✨ מסדר את העמודים האחרונים לתצוגה...');
+                break;
+              }
+
+              setProgress(98);
+              setStep('📖 פותח את הספר שלך...');
+
+              if (await preloadBookPreview(book)) {
+                shouldPollAgain = false;
+                setProgress(100);
+                setStep('✅ הספר מוכן!');
+
+                if (!stoppedRef.current) {
+                  navigate(`/book/${id}`, {
+                    replace: true,
+                    state: { justCreated: true },
+                  });
+                }
+              } else {
+                setStep('✨ טוען את האיורים באיכות מלאה...');
+              }
               break;
 
             case 'failed':
-              clearInterval(intervalRef.current);
+              shouldPollAgain = false;
               setStep('❌ אירעה שגיאה ביצירת הספר');
               break;
 
@@ -74,11 +150,16 @@ function BookLoading() {
               break;
           }
         } catch (err) {
-          clearInterval(intervalRef.current);
           console.error(err);
-          setStep('❌ שגיאה בתקשורת עם השרת');
+          setStep('מתחבר מחדש לשרת וממשיך להכין את הספר...');
         }
-      }, 1000);
+
+        if (shouldPollAgain && !stoppedRef.current) {
+          pollTimeoutRef.current = setTimeout(poll, POLL_INTERVAL_MS);
+        }
+      }
+
+      poll();
     },
     [navigate],
   );
@@ -89,6 +170,7 @@ function BookLoading() {
         location.state.formData,
         location.state.submissionId,
       );
+      if (!mountedRef.current) return;
       waitUntilCompleted(data.data._id);
     } catch (err) {
       console.error(err);
@@ -97,17 +179,22 @@ function BookLoading() {
   }, [location.state?.formData, location.state?.submissionId, waitUntilCompleted]);
 
   useEffect(() => {
+    mountedRef.current = true;
+    stoppedRef.current = false;
+
     if (!location.state?.formData) {
       navigate('/create-book');
       return;
     }
 
+    if (creationStartedRef.current) return;
+    creationStartedRef.current = true;
     createBook();
 
     return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
+      mountedRef.current = false;
+      stoppedRef.current = true;
+      if (pollTimeoutRef.current) clearTimeout(pollTimeoutRef.current);
     };
   }, [createBook, location.state, navigate]);
 

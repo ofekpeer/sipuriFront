@@ -67,7 +67,7 @@ function Footer() {
 
             <img
               src={mascot}
-              alt="Sipuri"
+              alt="סיפורי"
               loading="lazy"
               decoding="async"
             />
@@ -81,7 +81,7 @@ function Footer() {
 
             <h3>
 
-              Sipuri
+              סיפורי
 
             </h3>
 
@@ -168,7 +168,7 @@ function Footer() {
 
           <span>
 
-            © 2026 Sipuri
+            © 2026 סיפורי
 
           </span>
 

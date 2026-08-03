@@ -39,8 +39,8 @@ function Hero() {
             <div className="hero-book__spine" />
             <div className="cover">
               <div className="bookmark" />
-              <span className="cover-kicker">SIPURI</span>
-              <div className="monster"><img src={Fox} alt="דמות השועל של Sipuri" decoding="async" fetchPriority="high" /></div>
+              <span className="cover-kicker">סיפורי</span>
+              <div className="monster"><img src={Fox} alt="דמות השועל של סיפורי" decoding="async" fetchPriority="high" /></div>
               <h2>ההרפתקה<br />של נועם</h2>
               <span className="cover-spark cover-spark--one">✦</span>
               <span className="cover-spark cover-spark--two">✧</span>

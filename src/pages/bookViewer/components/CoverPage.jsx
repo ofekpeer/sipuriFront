@@ -1,18 +1,24 @@
 import React, { forwardRef } from 'react';
 import { getBookAssetUrl } from '../../../services/bookApi';
+import { useLiveBookContent } from './Book/BookContentContext';
 import './CoverPage.css';
 
 const CoverPage = forwardRef(({ book }, ref) => {
+  const liveBook = useLiveBookContent();
+  const displayedBook = liveBook || book;
+
   return (
     <div className="cover-page" ref={ref}>
       <div className="cover-inner">
 
-        {book.cover?.imageUrl ? (
+        {displayedBook.cover?.imageUrl ? (
           <img
-            src={getBookAssetUrl(book.cover.imageUrl)}
-            alt={book.title}
+            src={getBookAssetUrl(displayedBook.cover.imageUrl)}
+            alt={displayedBook.title}
             className="cover-book-image"
             draggable="false"
+            decoding="async"
+            fetchPriority="high"
           />
         ) : (
           <div className="cover-placeholder" aria-hidden="true">
@@ -20,12 +26,12 @@ const CoverPage = forwardRef(({ book }, ref) => {
           </div>
         )}
 
-        <h1>{book.title}</h1>
+        <h1>{displayedBook.title}</h1>
 
-        <p>{book.summary}</p>
+        <p>{displayedBook.summary}</p>
 
         <span>
-          ✨ נוצר במיוחד עבור {book.child.name}
+          <b aria-hidden="true">✦</b> נוצר במיוחד עבור {displayedBook.child.name}
         </span>
 
       </div>

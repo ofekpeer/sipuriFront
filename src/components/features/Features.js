@@ -41,7 +41,7 @@ function Features(){
 
                 <span>
 
-                    💜 למה משפחות אוהבות את Sipuri?
+                    💜 למה משפחות אוהבות את סיפורי?
 
                 </span>
 

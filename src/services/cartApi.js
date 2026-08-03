@@ -43,10 +43,17 @@ export function getCartRequest() {
   return cartRequest();
 }
 
-export function addBookToCartRequest(bookId) {
+export function addBookToCartRequest(bookId, productType = 'digital') {
   return cartRequest('/books', {
     method: 'POST',
-    body: JSON.stringify({ bookId }),
+    body: JSON.stringify({ bookId, productType }),
+  });
+}
+
+export function updateBookInCartRequest(bookId, productType) {
+  return cartRequest(`/books/${bookId}`, {
+    method: 'PATCH',
+    body: JSON.stringify({ productType }),
   });
 }
 
@@ -58,14 +65,18 @@ export function clearCartRequest() {
   return cartRequest('', { method: 'DELETE' });
 }
 
-export async function createCartCheckoutRequest() {
+export async function createCartCheckoutRequest(checkoutData = {}) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 30_000);
 
   try {
     const response = await fetch(`${API_URL}/api/payments/cart/checkout`, {
       method: 'POST',
-      headers: authHeaders(),
+      headers: {
+        ...authHeaders(),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(checkoutData),
       signal: controller.signal,
     });
     const contentType = response.headers.get('content-type') || '';

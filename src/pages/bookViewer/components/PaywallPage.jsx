@@ -45,12 +45,12 @@ const PaywallPage = forwardRef(({ bookId }, ref) => {
             onClick={addToCart}
             disabled={adding}
           >
-            {adding ? 'מוסיף לעגלה...' : 'הוספה לעגלה'}
+            {adding ? 'מוסיף לעגלה...' : 'דיגיטלי ב־49 ₪ לעגלה'}
           </button>
         )}
 
         <Link className="paywall-buy-now" to={`/book/${bookId}/checkout`}>
-          רכישה מיידית
+          בחירת חבילה ורכישה
         </Link>
       </div>
 

@@ -26,6 +26,8 @@ html{
 
     scroll-behavior:smooth;
 
+    direction: rtl;
+
 }
 
 body{
@@ -36,7 +38,71 @@ body{
 
     color:var(--text);
 
+    direction:rtl;
+
+    text-align:start;
+
     overflow-x:hidden;
+
+}
+
+#root{
+
+    min-height:100vh;
+
+    direction:rtl;
+
+}
+
+/* Hebrew punctuation must follow the sentence visually, even when text is
+   mixed with numbers, emoji, an email address, or a book title. */
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+li,
+label,
+legend,
+figcaption,
+blockquote,
+span,
+small,
+strong,
+b,
+em,
+button,
+a,
+input,
+textarea,
+select {
+
+    unicode-bidi: plaintext;
+
+}
+
+input,
+textarea,
+select {
+
+    direction:rtl;
+
+    text-align:start;
+
+}
+
+input[type="email"],
+input[type="password"],
+input[type="url"],
+input[type="number"],
+[dir="ltr"],
+[data-direction="ltr"] {
+
+    direction:ltr;
+
+    text-align:left;
 
 }
 

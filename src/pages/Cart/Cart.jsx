@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { useCart } from '../../context/CartContext';
@@ -6,16 +6,25 @@ import { createCartCheckoutRequest } from '../../services/cartApi';
 import { getBookAssetUrl } from '../../services/bookApi';
 import './Cart.css';
 
-const formatPrice = (amountAgorot) => (
-  new Intl.NumberFormat('he-IL', {
-    style: 'currency',
-    currency: 'ILS',
-  }).format((amountAgorot || 0) / 100)
-);
+const EMPTY_ADDRESS = {
+  fullName: '',
+  phone: '',
+  city: '',
+  street: '',
+  postalCode: '',
+  notes: '',
+};
+
+const formatPrice = (amountAgorot) => new Intl.NumberFormat('he-IL', {
+  style: 'currency',
+  currency: 'ILS',
+  maximumFractionDigits: 0,
+}).format((amountAgorot || 0) / 100);
 
 function Cart() {
   const {
     items,
+    products,
     summary,
     loading,
     error,
@@ -23,16 +32,66 @@ function Cart() {
     removeBook,
     emptyCart,
     refreshCart,
+    updateBookProduct,
   } = useCart();
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [checkoutError, setCheckoutError] = useState('');
+  const [shippingAddress, setShippingAddress] = useState(EMPTY_ADDRESS);
+  const [pendingProducts, setPendingProducts] = useState({});
 
-  async function checkout() {
+  const productsById = useMemo(
+    () => new Map((products || []).map((product) => [product.id, product])),
+    [products],
+  );
+  const displayedItems = useMemo(() => items.map((item) => {
+    const productType = pendingProducts[String(item.bookId)] || item.productType;
+    const product = productsById.get(productType);
+    return {
+      ...item,
+      productType,
+      productLabel: product?.label || item.productLabel,
+      includesPhysicalBook: product?.includesPhysicalBook ?? item.includesPhysicalBook,
+      unitPriceAgorot: product?.amountAgorot ?? item.unitPriceAgorot,
+    };
+  }), [items, pendingProducts, productsById]);
+  const displayedSubtotal = displayedItems.reduce(
+    (total, item) => total + (item.unitPriceAgorot || 0),
+    0,
+  );
+  const displayedHasPhysicalItems = displayedItems.some(
+    (item) => item.includesPhysicalBook,
+  );
+
+  function updateShippingField(event) {
+    const { name, value } = event.target;
+    setShippingAddress((current) => ({ ...current, [name]: value }));
+  }
+
+  async function selectProduct(bookId, productType, currentProductType) {
+    const key = String(bookId);
+    if (productType === currentProductType || updatingBookId) return;
+
+    setPendingProducts((current) => ({ ...current, [key]: productType }));
+    try {
+      await updateBookProduct(bookId, productType);
+    } finally {
+      setPendingProducts((current) => {
+        const next = { ...current };
+        delete next[key];
+        return next;
+      });
+    }
+  }
+
+  async function checkout(event) {
+    event.preventDefault();
     setCheckoutLoading(true);
     setCheckoutError('');
 
     try {
-      const response = await createCartCheckoutRequest();
+      const response = await createCartCheckoutRequest(
+        summary.hasPhysicalItems ? { shippingAddress } : {},
+      );
       window.location.assign(response.data.checkoutUrl);
     } catch (requestError) {
       setCheckoutError(requestError.message || 'לא הצלחנו להמשיך לתשלום.');
@@ -48,7 +107,7 @@ function Cart() {
       <header className="cart-hero">
         <span className="cart-hero__eyebrow">העגלה שלי</span>
         <h1>הסיפורים שבחרתם, במקום אחד</h1>
-        <p>אפשר להוסיף כמה ספרים, לחזור לערוך אותם ולהשלים את הרכישה יחד.</p>
+        <p>בחרו לכל ספר גרסה דיגיטלית או חבילה מלאה שכוללת גם ספר פיזי.</p>
       </header>
 
       {loading && !items.length ? (
@@ -90,7 +149,7 @@ function Cart() {
               </button>
             </div>
 
-            {items.map((item) => (
+            {displayedItems.map((item) => (
               <article className="cart-item" key={item.id}>
                 <div className="cart-item__cover">
                   {item.imageUrl ? (
@@ -106,9 +165,40 @@ function Cart() {
                 </div>
 
                 <div className="cart-item__details">
-                  <span>ספר דיגיטלי אישי</span>
+                  <span>ספר אישי עבור {item.childName || 'הילד או הילדה שלכם'}</span>
                   <h3>{item.title}</h3>
-                  {item.childName ? <p>נוצר במיוחד עבור {item.childName}</p> : null}
+
+                  <div
+                    className={`cart-product-picker${updatingBookId === String(item.bookId) ? ' is-updating' : ''}`}
+                    role="radiogroup"
+                    aria-label={`חבילה עבור ${item.title}`}
+                    aria-busy={updatingBookId === String(item.bookId)}
+                  >
+                    {(products || []).map((product) => (
+                      <label
+                        className={item.productType === product.id ? 'is-selected' : ''}
+                        key={product.id}
+                      >
+                        <input
+                          type="radio"
+                          name={`product-${item.bookId}`}
+                          value={product.id}
+                          checked={item.productType === product.id}
+                          onChange={() => selectProduct(
+                            item.bookId,
+                            product.id,
+                            item.productType,
+                          ).catch(() => {})}
+                          disabled={Boolean(updatingBookId)}
+                        />
+                        <span>
+                          {product.includesPhysicalBook ? '📚' : '📱'} {product.shortLabel || product.label}
+                        </span>
+                        <b>{formatPrice(product.amountAgorot)}</b>
+                      </label>
+                    ))}
+                  </div>
+
                   <div className="cart-item__links">
                     <Link to={`/book/${item.bookId}`}>תצוגה מקדימה</Link>
                     <Link to={`/library/book/${item.bookId}/edit`}>עריכת הספר</Link>
@@ -116,65 +206,84 @@ function Cart() {
                 </div>
 
                 <div className="cart-item__actions">
-                  {item.unitPriceAgorot !== null ? (
-                    <strong>{formatPrice(item.unitPriceAgorot)}</strong>
-                  ) : (
-                    <strong>המחיר יעודכן בקרוב</strong>
-                  )}
+                  <span>{item.productLabel}</span>
+                  <strong>{formatPrice(item.unitPriceAgorot)}</strong>
                   <button
                     type="button"
                     onClick={() => removeBook(item.bookId).catch(() => {})}
                     disabled={updatingBookId === String(item.bookId)}
                   >
-                    {updatingBookId === String(item.bookId) ? 'מסיר...' : 'הסרה'}
+                    {updatingBookId === String(item.bookId) ? 'מעדכן...' : 'הסרה'}
                   </button>
                 </div>
               </article>
             ))}
           </section>
 
-          <aside className="cart-summary">
+          <form className="cart-summary" onSubmit={checkout}>
             <span className="cart-summary__badge">🔒 רכישה מאובטחת</span>
             <h2>סיכום הזמנה</h2>
             <div className="cart-summary__row">
               <span>ספרים ({summary.itemCount})</span>
-              <strong>
-                {summary.subtotalAgorot !== null
-                  ? formatPrice(summary.subtotalAgorot)
-                  : 'טרם הוגדר'}
-              </strong>
+              <strong>{formatPrice(displayedSubtotal)}</strong>
             </div>
+
+            {displayedHasPhysicalItems ? (
+              <fieldset className="cart-shipping">
+                <legend>📦 כתובת למשלוח</legend>
+                <label>
+                  שם מלא
+                  <input name="fullName" value={shippingAddress.fullName} onChange={updateShippingField} required />
+                </label>
+                <label>
+                  טלפון
+                  <input name="phone" type="tel" value={shippingAddress.phone} onChange={updateShippingField} required />
+                </label>
+                <label>
+                  עיר
+                  <input name="city" value={shippingAddress.city} onChange={updateShippingField} required />
+                </label>
+                <label>
+                  רחוב, מספר בית ודירה
+                  <input name="street" value={shippingAddress.street} onChange={updateShippingField} required />
+                </label>
+                <label>
+                  מיקוד
+                  <input name="postalCode" value={shippingAddress.postalCode} onChange={updateShippingField} />
+                </label>
+                <label>
+                  הערות לשליח
+                  <input name="notes" value={shippingAddress.notes} onChange={updateShippingField} />
+                </label>
+              </fieldset>
+            ) : null}
+
             <div className="cart-summary__divider" />
             <div className="cart-summary__total">
               <span>סה״כ</span>
-              <strong>
-                {summary.subtotalAgorot !== null
-                  ? formatPrice(summary.subtotalAgorot)
-                  : '—'}
-              </strong>
+              <strong>{formatPrice(displayedSubtotal)}</strong>
             </div>
 
             <button
               className="cart-checkout-button"
-              type="button"
-              onClick={checkout}
-              disabled={checkoutLoading || !summary.checkoutConfigured}
+              type="submit"
+              disabled={checkoutLoading || Boolean(updatingBookId) || !summary.checkoutConfigured}
             >
               {checkoutLoading ? 'פותחים תשלום מאובטח...' : 'המשך לתשלום'}
             </button>
 
             {!summary.checkoutConfigured ? (
-              <p className="cart-summary__notice">התשלום ייפתח לאחר השלמת הגדרת המחיר והסליקה.</p>
+              <p className="cart-summary__notice">הסליקה עדיין אינה זמינה.</p>
             ) : null}
             {checkoutError ? <p className="cart-error" role="alert">{checkoutError}</p> : null}
             {error ? <p className="cart-error" role="alert">{error}</p> : null}
 
             <div className="cart-summary__benefits">
-              <span>✓ גישה לכל עמודי הספר</span>
+              <span>✓ גישה לכל עמודי הספר לאחר התשלום</span>
               <span>✓ הספר נשמר בספרייה האישית</span>
-              <span>✓ זמינות מכל מכשיר</span>
+              {displayedHasPhysicalItems ? <span>✓ הספר הפיזי יישלח לכתובת שהוזנה</span> : null}
             </div>
-          </aside>
+          </form>
         </div>
       )}
     </main>

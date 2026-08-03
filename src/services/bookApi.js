@@ -177,12 +177,16 @@ export async function deleteBookRequest(id) {
   return data;
 }
 
-export async function createBookCheckoutRequest(bookId) {
+export async function createBookCheckoutRequest(bookId, checkoutData = {}) {
   const response = await fetchWithTimeout(
     `${API_URL}/api/payments/books/${bookId}/checkout`,
     {
       method: 'POST',
-      headers: getAuthHeaders(),
+      headers: {
+        ...getAuthHeaders(),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(checkoutData),
     },
     30_000,
   );

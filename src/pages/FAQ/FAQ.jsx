@@ -4,8 +4,8 @@ import "./FAQ.css";
 
 const questions = [
   {
-    question: "מה זה Sipuri?",
-    answer: "Sipuri מאפשר ליצור ספר ילדים אישי שבו הילד או הילדה הופכים לגיבורי הסיפור. בוחרים נושא, מוסיפים פרטים ותמונה, ואנחנו יוצרים חוויה מאוירת במיוחד עבורכם.",
+    question: "מה זה סיפורי?",
+    answer: "סיפורי מאפשר ליצור ספר ילדים אישי שבו הילד או הילדה הופכים לגיבורי הסיפור. בוחרים נושא, מוסיפים פרטים ותמונה, ואנחנו יוצרים חוויה מאוירת במיוחד עבורכם.",
   },
   {
     question: "איך יוצרים ספר?",
@@ -65,7 +65,7 @@ function FAQ() {
   return (
     <main className="faq-page" dir="rtl">
       <section className="faq-hero">
-        <span className="faq-hero__eyebrow">SIPURI · כאן בשבילכם</span>
+        <span className="faq-hero__eyebrow">סיפורי · כאן בשבילכם</span>
         <h1>שאלות נפוצות</h1>
         <p>כל מה שכדאי לדעת לפני שמתחילים ליצור סיפור אישי וקסום.</p>
       </section>

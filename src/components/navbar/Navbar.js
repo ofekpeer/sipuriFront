@@ -195,13 +195,13 @@ function Navbar({
       dir="rtl"
     >
       <div className="navbar-container">
-        <Link to="/" className="navbar-logo" aria-label="Sipuri — דף הבית">
+        <Link to="/" className="navbar-logo" aria-label="סיפורי — דף הבית">
           <span className="navbar-logo__mark">
             <img src={Fox} alt="" aria-hidden="true" />
           </span>
           <span className="navbar-logo__copy">
-            <strong>Sipuri</strong>
-            <small>Personalized Storybooks</small>
+            <strong>סיפורי</strong>
+            <small>ספרי ילדים אישיים</small>
           </span>
         </Link>
 
@@ -326,7 +326,7 @@ function Navbar({
               <Link to="/" className="navbar-drawer__brand" onClick={closeMenu}>
                 <img src={Fox} alt="" aria-hidden="true" />
                 <span>
-                  <strong>Sipuri</strong>
+                  <strong>סיפורי</strong>
                   <small>הסיפור שלך מתחיל כאן</small>
                 </span>
               </Link>

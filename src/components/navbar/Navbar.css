@@ -63,7 +63,7 @@
 .navbar-logo__copy {
   display: grid;
   min-width: 0;
-  direction: ltr;
+  direction: rtl;
   line-height: 1;
 }
 
@@ -79,7 +79,7 @@
   margin-top: 7px;
   color: #7d7585;
   font-size: 12px;
-  letter-spacing: 0.035em;
+  letter-spacing: normal;
   text-overflow: ellipsis;
   white-space: nowrap;
 }

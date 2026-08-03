@@ -12,8 +12,11 @@
 .auth-error { margin: 0; color: #c34061; font-size: 14px; }
 .auth-divider { display: flex; align-items: center; gap: 12px; margin: 22px 0; color: #93899f; font-size: 13px; }
 .auth-divider::before, .auth-divider::after { content: ''; flex: 1; height: 1px; background: #e8e1ee; }
-.google-login { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; padding: 14px; border: 1px solid #ddd6e7; border-radius: 13px; background: #fff; color: #443953; font: inherit; font-weight: 800; }
-.google-login span { display: grid; width: 23px; height: 23px; place-items: center; border-radius: 50%; color: #fff; background: conic-gradient(#4285f4 0 25%, #34a853 0 50%, #fbbc05 0 75%, #ea4335 0); font-size: 13px; }
+button.google-login { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; padding: 14px; border: 1px solid #ddd6e7; border-radius: 13px; background: #fff; color: #443953; font: inherit; font-weight: 800; }
+.google-login .google-login__icon { display: grid; width: 23px; height: 23px; flex: 0 0 auto; place-items: center; border-radius: 50%; color: #fff; background: conic-gradient(#4285f4 0 25%, #34a853 0 50%, #fbbc05 0 75%, #ea4335 0); font-size: 13px; }
+.auth-panel > .auth-server-status { display: flex; align-items: flex-start; gap: 10px; margin: 14px 0 0; padding: 12px 13px; border: 1px solid #e3daf7; border-radius: 12px; color: #65577d; background: #f8f5ff; font-size: 12px; line-height: 1.55; }
+.auth-server-spinner { width: 17px; height: 17px; flex: 0 0 auto; margin-top: 1px; border: 2px solid #dcd2f5; border-top-color: #7659e5; border-radius: 50%; animation: auth-server-spin .8s linear infinite; }
+@keyframes auth-server-spin { to { transform: rotate(360deg); } }
 .auth-switch { margin: 24px 0 0; text-align: center; }
 .auth-switch a { color: #6d4cff; font-weight: 800; }
 @media (max-width: 500px) { .auth-page, .auth-route-loading { padding: 94px 16px 24px; } .auth-panel { padding: 30px 24px; } .auth-panel h1 { font-size: 30px; } }

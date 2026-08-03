@@ -1,7 +1,7 @@
 import "./BookPreview.css";
 import { useBook } from "../../context/BookContext";
 
-import Sipuri from "../../assets/sipuri-fox.png";
+import mascot from "../../assets/sipuri-fox.png";
 
 function BookPreview() {
 
@@ -76,9 +76,9 @@ function BookPreview() {
 
           <img
 
-            src={Sipuri}
+            src={mascot}
 
-            alt="Sipuri"
+            alt="סיפורי"
 
             className="preview-character"
 

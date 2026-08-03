@@ -1,7 +1,11 @@
 import React, { forwardRef } from "react";
+import { useLiveBookContent } from './Book/BookContentContext';
 import "./EndingPage.css";
 
 const EndingPage = forwardRef(({ book }, ref) => {
+  const liveBook = useLiveBookContent();
+  const displayedBook = liveBook || book;
+
   return (
     <div className="ending-page" ref={ref}>
 
@@ -12,7 +16,7 @@ const EndingPage = forwardRef(({ book }, ref) => {
       <h1>מוסר ההשכל</h1>
 
       <p>
-        {book.moral}
+        {displayedBook?.moral}
       </p>
 
       <span>

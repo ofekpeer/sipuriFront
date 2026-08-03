@@ -159,6 +159,54 @@
   color: #756c80;
 }
 
+.cart-product-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 14px;
+}
+
+.cart-product-picker label {
+  position: relative;
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 11px;
+  border: 1px solid #ded6eb;
+  border-radius: 12px;
+  color: #675b72;
+  background: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.cart-product-picker label.is-selected {
+  border-color: #8061e7;
+  color: #5f43ce;
+  background: #f3efff;
+  box-shadow: 0 7px 18px rgba(88, 61, 168, .1);
+}
+
+.cart-product-picker.is-updating label {
+  cursor: wait;
+}
+
+.cart-product-picker.is-updating label:not(.is-selected) {
+  opacity: 0.58;
+}
+
+.cart-product-picker input {
+  position: absolute;
+  opacity: 0;
+}
+
+.cart-product-picker b {
+  color: #5f43ce;
+  white-space: nowrap;
+}
+
 .cart-item__links {
   display: flex;
   flex-wrap: wrap;
@@ -181,6 +229,14 @@
 .cart-item__actions strong {
   max-width: 130px;
   font-size: 18px;
+  text-align: left;
+}
+
+.cart-item__actions > span {
+  max-width: 130px;
+  color: #796d84;
+  font-size: 11px;
+  font-weight: 800;
   text-align: left;
 }
 
@@ -218,6 +274,47 @@
   height: 1px;
   margin: 22px 0;
   background: #e8e1f4;
+}
+
+.cart-shipping {
+  display: grid;
+  gap: 11px;
+  margin: 23px 0 0;
+  padding: 17px;
+  border: 1px solid #e2daef;
+  border-radius: 17px;
+  background: #fbf9ff;
+}
+
+.cart-shipping legend {
+  padding: 0 7px;
+  color: #594a6c;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.cart-shipping label {
+  display: grid;
+  gap: 5px;
+  color: #6e6279;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.cart-shipping input {
+  width: 100%;
+  min-height: 40px;
+  padding: 0 10px;
+  border: 1px solid #ddd4eb;
+  border-radius: 10px;
+  background: #fff;
+  font: inherit;
+  outline: none;
+}
+
+.cart-shipping input:focus {
+  border-color: #8061e7;
+  box-shadow: 0 0 0 3px rgba(128, 97, 231, .1);
 }
 
 .cart-summary__total strong {
@@ -363,6 +460,10 @@
     justify-content: space-between;
     width: 100%;
     padding-top: 4px;
+  }
+
+  .cart-product-picker {
+    grid-column: 1 / -1;
   }
 
   .cart-items__header {

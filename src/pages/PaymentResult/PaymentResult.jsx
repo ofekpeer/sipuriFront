@@ -49,6 +49,7 @@ function PaymentResult() {
   const paid = payment?.status === 'paid';
   const cancelled = requestedOutcome === 'cancel' || payment?.status === 'cancelled';
   const purchasedSeveralBooks = payment?.bookIds?.length > 1;
+  const hasPhysicalBook = Boolean(payment?.hasPhysicalBook);
   const bookPath = purchasedSeveralBooks
     ? '/library'
     : payment?.bookId ? `/book/${payment.bookId}` : '/library';
@@ -62,9 +63,11 @@ function PaymentResult() {
           <h1>{paid ? 'התשלום התקבל בהצלחה!' : cancelled ? 'התשלום בוטל' : 'התשלום לא הושלם'}</h1>
           <p>
             {paid
-              ? purchasedSeveralBooks
-                ? 'כל הספרים שרכשת נפתחו ונשמרו בספרייה שלך. קריאה נעימה!'
-                : 'הספר המלא נפתח עבורך עכשיו. קריאה נעימה!'
+              ? hasPhysicalBook
+                ? 'הגרסה הדיגיטלית נפתחה ונשמרה בספרייה. הספר הפיזי נכנס להכנה ויישלח לכתובת שמסרת.'
+                : purchasedSeveralBooks
+                  ? 'כל הספרים נפתחו ונשמרו בספרייה. איורי ההמשך נוצרים עכשיו ויתעדכנו אוטומטית.'
+                  : 'הספר נפתח עבורך. אפשר להתחיל לקרוא בזמן שאיורי ההמשך נוצרים ומתעדכנים אוטומטית.'
               : cancelled
                 ? 'לא חויבת. אפשר לחזור לספר ולנסות שוב מתי שנוח.'
                 : 'לא חויבת או שהתשלום לא אומת. אפשר לנסות שוב.'}

@@ -42,7 +42,14 @@ function Library() {
   }, [loadLibrary]);
 
   const hasGeneratingBooks = useMemo(
-    () => books.some((book) => book.status === 'generating'),
+    () => books.some((book) => (
+      book.status === 'generating'
+      || ['generating', 'partial'].includes(book.previewImagesStatus)
+      || (
+        book.isPurchased
+        && ['queued', 'generating'].includes(book.remainingPagesStatus)
+      )
+    )),
     [books],
   );
 

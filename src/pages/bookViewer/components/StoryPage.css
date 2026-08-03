@@ -1,7 +1,7 @@
 .story-page {
   width: 100%;
   height: 100%;
-  padding: 4px;
+  padding: 3px;
   box-sizing: border-box;
 }
 
@@ -12,8 +12,10 @@
   overflow: hidden;
   border-radius: 12px;
   background: #fff;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 12px 28px rgba(16, 11, 35, 0.16),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(28, 19, 56, 0.09);
 }
 
 .story-background {
@@ -45,8 +47,27 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #ddd;
-  font-size: 90px;
+  flex-direction: column;
+  gap: 18px;
+  color: #7258c9;
+  background:
+    radial-gradient(circle at 50% 35%, #fff, transparent 35%),
+    linear-gradient(145deg, #f6f0ff, #e9e5f6);
+}
+
+.story-placeholder span {
+  width: 72px;
+  height: 72px;
+  border: 6px solid rgba(112, 82, 204, 0.15);
+  border-top-color: #7959db;
+  border-radius: 50%;
+  animation: story-placeholder-spin 1s linear infinite;
+}
+
+.story-placeholder p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 850;
 }
 
 .story-overlay {
@@ -54,8 +75,9 @@
   inset: 0;
   background: linear-gradient(
     to bottom,
-    rgba(0, 0, 0, 0.05),
-    rgba(0, 0, 0, 0.4)
+    rgba(11, 8, 24, 0.02) 34%,
+    rgba(11, 7, 23, 0.2) 64%,
+    rgba(9, 6, 20, 0.62) 100%
   );
 }
 
@@ -75,27 +97,41 @@
 .story-text {
   color: white;
   font-size: 15px;
-  line-height: 1.6;
-  padding: 12px 14px;
-  border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  font-weight: 650;
+  line-height: 1.7;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
   white-space: pre-wrap;
-  max-width: min(58%, 320px);
+  max-width: min(68%, 360px);
   text-align: center;
+  background: rgba(11, 8, 24, 0.45);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.42);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
 }
 
 .story-footer {
   color: white;
   padding: 6px 12px;
   border-radius: 999px;
-  background: rgba(0, 0, 0, 0.35);
+  background: rgba(9, 6, 20, 0.52);
   font-size: 11px;
+  font-weight: 800;
   letter-spacing: 0.03em;
   align-self: center;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.14);
 }
 
 .empty-paper {
   background: #f3f3f3;
+}
+
+@keyframes story-placeholder-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media (max-width: 900px) {
@@ -130,12 +166,20 @@
     font-size: 13px;
     line-height: 1.5;
     padding: 10px;
-    max-width: min(72%, 260px);
+    max-width: min(76%, 280px);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
 
   .story-footer {
     font-size: 10px;
     padding: 5px 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .story-placeholder span {
+    animation: none;
   }
 }
 

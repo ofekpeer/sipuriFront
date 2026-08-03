@@ -1,26 +1,45 @@
 .book-view {
-  width: 100vw;
-  height: 100vh;
   position: relative;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
 }
 
 .book-stage {
+  position: relative;
+  display: flex;
   width: 100%;
   height: 100%;
+  min-width: 0;
   min-height: 0;
-  display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   overflow: hidden;
-  padding: 0;
-  position: relative;
+  perspective: 2200px;
 }
 
-/* Do not style all descendants here: react-pageflip applies transforms to its
-   internal elements while it renders and turns pages. */
+.book-flipbook {
+  direction: ltr;
+  unicode-bidi: isolate;
+  filter:
+    drop-shadow(0 30px 34px rgba(22, 16, 52, 0.2))
+    drop-shadow(0 8px 12px rgba(34, 23, 70, 0.14));
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+.book-flipbook .cover-page,
+.book-flipbook .story-page,
+.book-flipbook .paywall-page,
+.book-flipbook .ending-page {
+  direction: rtl;
+}
+
+/* react-pageflip owns the transforms of its wrappers. Illustrations themselves
+   must remain completely fixed while a page is turning. */
 .cover-book-image,
 .story-background img {
   display: block;
@@ -29,8 +48,6 @@
   user-select: none;
 }
 
-/* Keep the illustration fixed. Page transforms belong to react-pageflip's
-   wrapper elements, never to the image itself. */
 .cover-page:hover .cover-book-image,
 .story-page:hover .story-background img {
   top: 0;
@@ -38,110 +55,264 @@
   transform: none !important;
 }
 
-.book-view > .nav-button:first-child,
-.book-view > .nav-button:last-child {
+.book-reader-heading {
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%) scale(var(--nav-button-scale, 1));
-  z-index: 10;
-  pointer-events: auto;
-}
-
-.book-view > .nav-button:first-child {
-  left: 16px;
-}
-
-.book-view > .nav-button:last-child {
-  right: 16px;
-}
-
-.spread {
-  width: 100%;
-  height: 100%;
+  z-index: 40;
+  top: 14px;
+  left: 50%;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-  overflow: hidden;
+  width: min(760px, calc(100% - 220px));
+  min-height: 54px;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px 8px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.62);
+  border-radius: 18px;
+  direction: rtl;
+  background: rgba(255, 255, 255, 0.76);
+  box-shadow: 0 14px 35px rgba(30, 21, 62, 0.11);
+  backdrop-filter: blur(18px) saturate(1.16);
+  -webkit-backdrop-filter: blur(18px) saturate(1.16);
+  transform: translateX(-50%);
+  box-sizing: border-box;
 }
 
-.spread > * {
-  width: 100%;
-  height: 100%;
+.book-reader-heading__icon {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border-radius: 12px;
+  color: #fff;
+  background: linear-gradient(135deg, #7654ec, #9c73ff);
+  box-shadow: 0 9px 18px rgba(106, 75, 220, 0.26);
+  font-size: 18px;
+}
+
+.book-reader-heading__copy {
+  display: grid;
   min-width: 0;
-  min-height: 0;
+  gap: 1px;
+}
+
+.book-reader-heading__copy span {
+  color: #7d7193;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.book-view.is-finishing-pages .book-reader-heading__copy span {
+  color: #6d4cff;
+}
+
+.book-view.is-finishing-pages .book-reader-heading__icon {
+  animation: paid-pages-pulse 1.8s ease-in-out infinite;
+}
+
+.book-view.has-page-error .book-reader-heading__copy span {
+  color: #b34a63;
+}
+
+.book-view.has-page-error .book-reader-heading__icon {
+  background: linear-gradient(135deg, #b94c69, #de7890);
+}
+
+.book-reader-heading__copy strong {
+  overflow: hidden;
+  color: #35284f;
+  font-size: 14px;
+  font-weight: 900;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.book-reader-heading__page {
+  min-width: 82px;
+  padding: 9px 12px;
+  border-radius: 12px;
+  color: #684bd2;
+  background: rgba(111, 78, 226, 0.09);
+  font-size: 11px;
+  font-weight: 900;
+  text-align: center;
 }
 
 .nav-button {
-  width: 48px;
-  height: 48px;
-  border: none;
+  position: absolute;
+  z-index: 50;
+  top: 50%;
+  display: grid;
+  width: 58px;
+  height: 58px;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 19px;
   outline: none;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-  font-size: 20px;
-  font-weight: 600;
+  color: #5d42c4;
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow:
+    0 16px 34px rgba(28, 18, 60, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92);
+  font-size: 27px;
   cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   user-select: none;
-  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.12s ease;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  transform: translateY(-50%) scale(var(--nav-button-scale, 1));
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.16s ease,
+    opacity 0.2s ease;
+}
+
+.nav-button--previous {
+  left: clamp(18px, 3vw, 54px);
+}
+
+.nav-button--next {
+  right: clamp(18px, 3vw, 54px);
 }
 
 .nav-button:hover:not(:disabled) {
-  background: white;
+  --nav-button-scale: 1.06;
+  color: #fff;
+  background: linear-gradient(135deg, #6d4cff, #9170fa);
+  box-shadow: 0 19px 40px rgba(86, 59, 184, 0.32);
 }
 
 .nav-button:active:not(:disabled) {
-  --nav-button-scale: 0.97;
+  --nav-button-scale: 0.96;
 }
 
 .nav-button:disabled {
-  opacity: 0.4;
+  opacity: 0.3;
   cursor: default;
+  filter: grayscale(0.3);
+}
+
+.book-reader-footer {
+  position: absolute;
+  z-index: 40;
+  right: 50%;
+  bottom: 13px;
+  display: flex;
+  width: min(470px, calc(100% - 190px));
+  align-items: center;
+  gap: 14px;
+  padding: 9px 13px;
+  border: 1px solid rgba(255, 255, 255, 0.56);
+  border-radius: 999px;
+  direction: rtl;
+  background: rgba(255, 255, 255, 0.68);
+  box-shadow: 0 12px 28px rgba(30, 21, 62, 0.1);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transform: translateX(50%);
+  box-sizing: border-box;
+}
+
+.book-reader-footer__hint {
+  flex: 0 0 auto;
+  color: #6f657d;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.book-reader-progress {
+  height: 5px;
+  flex: 1;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(91, 68, 143, 0.12);
+}
+
+.book-reader-progress > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #6d4cff, #c095ff, #efb86a);
+  transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .story-page.empty-page {
   visibility: hidden;
 }
 
+.book-viewer--reveal .book-view {
+  animation: book-reader-reveal 0.72s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes book-reader-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes paid-pages-pulse {
+  50% {
+    box-shadow: 0 9px 24px rgba(106, 75, 220, 0.5);
+    transform: scale(1.05);
+  }
+}
+
 @media (max-width: 900px) {
-  .book-view {
-    padding: 0 8px;
+  .book-reader-heading {
+    width: min(640px, calc(100% - 150px));
   }
 
-  .nav-button {
-    width: 46px;
-    height: 46px;
-    font-size: 20px;
+  .book-reader-footer {
+    width: min(430px, calc(100% - 150px));
+  }
+
+  .nav-button--previous {
+    left: 12px;
+  }
+
+  .nav-button--next {
+    right: 12px;
   }
 }
 
 @media (max-width: 768px) {
-  .book-view {
-    display: block;
-    padding: 0;
+  .book-reader-heading {
+    top: 8px;
+    width: calc(100% - 24px);
+    min-height: 44px;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 8px;
+    padding: 6px 7px 6px 10px;
+    border-radius: 15px;
   }
 
-  .book-view > .nav-button:first-child {
-    position: absolute;
-    top: 50%;
-    left: 12px;
-    transform: translateY(-50%) scale(var(--nav-button-scale, 1));
+  .book-reader-heading__icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    font-size: 15px;
   }
 
-  .book-view > .nav-button:last-child {
-    position: absolute;
-    top: 50%;
-    right: 12px;
-    transform: translateY(-50%) scale(var(--nav-button-scale, 1));
+  .book-reader-heading__copy span {
+    font-size: 8px;
   }
 
-  .book-stage {
-    min-width: 0;
-    width: 100%;
-    height: 100vh;
+  .book-reader-heading__copy strong {
+    font-size: 11px;
+  }
+
+  .book-reader-heading__page {
+    min-width: 62px;
+    padding: 7px 8px;
+    border-radius: 10px;
+    font-size: 9px;
   }
 
   .nav-button {
@@ -149,17 +320,83 @@
     height: 46px;
     border-radius: 50%;
     color: #fff;
-    background: rgba(21, 28, 52, 0.42);
-    border: 1px solid rgba(255, 255, 255, 0.36);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
-    backdrop-filter: blur(6px);
+    background: rgba(20, 18, 40, 0.48);
+    border-color: rgba(255, 255, 255, 0.38);
+    box-shadow: 0 10px 24px rgba(10, 7, 24, 0.24);
+    font-size: 23px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .nav-button--previous {
+    left: 12px;
+  }
+
+  .nav-button--next {
+    right: 12px;
   }
 
   .nav-button:hover:not(:disabled) {
-    background: rgba(21, 28, 52, 0.56);
+    color: #fff;
+    background: rgba(20, 18, 40, 0.64);
+  }
+
+  .nav-button:disabled {
+    opacity: 0.2;
+  }
+
+  .book-reader-footer {
+    bottom: 7px;
+    width: calc(100% - 32px);
+    gap: 9px;
+    padding: 7px 10px;
+  }
+
+  .book-reader-footer__hint {
+    font-size: 9px;
+  }
+
+  .book-reader-progress {
+    height: 4px;
+  }
+
+  .book-flipbook {
+    filter: drop-shadow(0 18px 24px rgba(20, 13, 44, 0.22));
   }
 
   .story-page.empty-page {
     display: none;
+  }
+}
+
+@media (max-width: 430px) {
+  .book-reader-heading__copy span {
+    display: none;
+  }
+
+  .book-reader-heading__page {
+    min-width: 58px;
+  }
+
+  .book-reader-footer__hint {
+    max-width: 118px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .book-viewer--reveal .book-view {
+    animation: none;
+  }
+
+  .book-view.is-finishing-pages .book-reader-heading__icon {
+    animation: none;
+  }
+
+  .nav-button,
+  .book-reader-progress > span {
+    transition: none;
   }
 }
